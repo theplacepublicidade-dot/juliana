@@ -40,7 +40,7 @@ const materials: Material[] = [
     driveId: "1do57YPL8O644qbhI1260b1H1zZwFqpfk",
     caption:
       "Chegou a hora de ampliar a voz das mulheres e transformar coragem em ação. Eu estou com Juliana 1020!",
-    image: "/media/agora-e-a-vez.png",
+    image: "/media/agora-e-a-vez.webp",
   },
   {
     id: "araguaia",
@@ -52,7 +52,7 @@ const materials: Material[] = [
     driveId: "1zFh-2DySkIEwRyVsamHIIVBk0AQtjL3Q",
     caption:
       "O Vale do Araguaia merece representação, investimento e respeito. A força do Araguaia em ação é Juliana 1020.",
-    image: "/media/vale-do-araguaia.png",
+    image: "/media/vale-do-araguaia.webp",
   },
   {
     id: "no-ar",
@@ -64,7 +64,7 @@ const materials: Material[] = [
     driveId: "1OMV6fysLgyU7SZZW4s0wWs0P3-Glv9xX",
     caption:
       "A nossa mensagem está no ar! Compartilhe com seus amigos e venha fazer parte desse movimento. Juliana 1020.",
-    image: "/media/juliana-no-ar.png",
+    image: "/media/juliana-no-ar.webp",
   },
   {
     id: "melhor-idade",
@@ -76,7 +76,7 @@ const materials: Material[] = [
     driveId: "1fcEoxTKIzFt8UMPa8RpKTaA8pchqJXJz",
     caption:
       "Cuidar de quem construiu nossa história é compromisso. Mais respeito, saúde e qualidade de vida para a melhor idade.",
-    image: "/media/melhor-idade.png",
+    image: "/media/melhor-idade.webp",
   },
   {
     id: "vila-lilas",
@@ -88,7 +88,7 @@ const materials: Material[] = [
     driveId: "1jO6nkCNjYRdHn4ITjl10kWkPE4eMTEN6",
     caption:
       "A Vila Lilás é acolhimento, proteção e oportunidade para as mulheres. Vamos fazer essa ideia chegar mais longe.",
-    image: "/media/vila-lilas.png",
+    image: "/media/vila-lilas.webp",
   },
   {
     id: "foto-1",

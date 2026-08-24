@@ -41,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: "pt_BR",
       images: [
         {
-          url: `${origin}/og.png`,
+          url: `${origin}/og.jpg`,
           width: 1536,
           height: 1024,
           alt: "Central Juliana 1020 - materiais oficiais para apoiar e compartilhar",
@@ -52,7 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: [`${origin}/og.png`],
+      images: [`${origin}/og.jpg`],
     },
   };
 }
