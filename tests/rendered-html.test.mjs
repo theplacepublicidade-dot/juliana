@@ -33,9 +33,11 @@ test("server-renders the Juliana content hub", async () => {
   assert.match(html, /id="historia"/);
   assert.match(html, /Quem é Juliana/);
   assert.match(html, /16\.385/);
-  assert.match(html, /Corredor Ecológico Onça-Pintada/);
-  assert.match(html, /id="foto"/);
+  assert.match(html, /Desenvolvimento com segurança jurídica/);
+  assert.match(html, /id="avatar"/);
   assert.match(html, /id="materiais"/);
+  assert.match(html, /164/);
+  assert.match(html, /27/);
   assert.match(html, /whatsapp\.com\/channel\/0029Vb8J3XW8F2p68rcnif34/);
   assert.doesNotMatch(html, /codex-preview|Building your site/i);
 });
@@ -48,10 +50,10 @@ test("keeps photo personalization local and provides a Vercel build", async () =
     readFile(new URL("../package.json", import.meta.url), "utf8"),
   ]);
 
-  assert.match(page, /accept="image\/png,image\/jpeg"/);
+  assert.match(page, /accept="image\/\*"/);
   assert.match(page, /canvas\.toBlob/);
   assert.match(page, /URL\.revokeObjectURL/);
-  assert.match(page, /Sua imagem não é enviada nem armazenada/);
+  assert.match(page, /Sua foto é processada apenas no navegador/);
   assert.match(vercelHtml, /Central Juliana 1020/);
   assert.match(vercelHtml, /og\.jpg/);
   assert.match(vercelConfig, /"framework": "vite"/);

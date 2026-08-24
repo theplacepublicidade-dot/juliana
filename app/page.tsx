@@ -1,266 +1,444 @@
 "use client";
 
-import { FormEvent, useMemo, useRef, useState } from "react";
+import {
+  ArrowDownToLine,
+  ArrowRight,
+  BadgeCheck,
+  BookOpen,
+  Building2,
+  Camera,
+  Check,
+  ChevronDown,
+  CircleUserRound,
+  Download,
+  FileText,
+  FolderOpen,
+  HandHeart,
+  HeartHandshake,
+  Home as HomeIcon,
+  Hospital,
+  Image as ImageIcon,
+  Leaf,
+  Menu,
+  MessageCircle,
+  Music2,
+  Play,
+  Search,
+  Share2,
+  ShieldCheck,
+  Sparkles,
+  Tractor,
+  Upload,
+  UsersRound,
+  Video,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import {
+  FormEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  archiveCounts,
+  collectionFolders,
+  driveDownload,
+  driveFolder,
+  drivePreview,
+  driveView,
+  materials,
+  type Material,
+  type MaterialKind,
+} from "./materials";
 
-type MaterialType = "Artes" | "Vídeos" | "Fotos" | "Áudios" | "Impressos";
+const typeFilters = [
+  "Todos",
+  "Vídeos",
+  "Fotos",
+  "Músicas",
+  "Artes",
+  "Logos",
+  "Impressos",
+  "Documentos",
+  "Identidade",
+] as const;
 
-type Material = {
+const featuredIds = [
+  "video-1E6FsQ9OMpRsvIRNM1zia7rP6fzb80rQ2",
+  "video-1XpusBENWqAQ1QRfntrbiGmvyc-aBFU02",
+  "video-1gBd2krPZhqNqrcBuh3Ia5HxZxWrDolKE",
+  "arte-1zFh-2DySkIEwRyVsamHIIVBk0AQtjL3Q",
+  "foto-1m0PThl54L8N7J2iALMjEXB_QW9_HnKW_",
+  "audio-1gsgmMbwnY1zwpzokl8j3sXeXN-v-U3yQ",
+];
+
+const proposals: Array<{
   id: string;
   title: string;
-  type: MaterialType;
-  format: string;
-  theme: string;
-  date: string;
-  driveId: string;
-  caption: string;
-  image?: string;
-  accent?: "blue" | "green" | "yellow";
-};
-
-const materials: Material[] = [
+  kicker: string;
+  summary: string;
+  stat: string;
+  statLabel: string;
+  points: string[];
+  image: string;
+  icon: LucideIcon;
+  tone: string;
+}> = [
   {
-    id: "tijolo",
-    title: "A cada tijolo, um novo começo",
-    type: "Artes",
-    format: "Feed 1080 × 1350",
-    theme: "Habitação",
-    date: "23 ago",
-    driveId: "1eZzyWFi150ndfP-5rGTbjgrIVA5J79vb",
-    caption:
-      "Moradia digna transforma vidas. Com trabalho e compromisso, vamos construir novos caminhos para as famílias de Mato Grosso. Juliana 1020!",
-    image: "/media/a-cada-tijolo.jpg",
+    id: "mulheres",
+    title: "Proteção e autonomia para mulheres",
+    kicker: "Casa Lilás",
+    summary:
+      "Acolhimento seguro para mulheres com medida protetiva, unido a qualificação, renda e reconstrução de vida.",
+    stat: "10",
+    statLabel: "kitnets de acolhimento",
+    points: [
+      "Moradia temporária e proteção para vítimas de violência doméstica.",
+      "Acesso integrado aos programas sociais do município.",
+      "Capacitação técnica para autonomia e geração de renda.",
+    ],
+    image: "/media/vila-lilas.webp",
+    icon: ShieldCheck,
+    tone: "violet",
   },
   {
-    id: "agora",
-    title: "Agora é a vez da mulher",
-    type: "Artes",
-    format: "Feed 1080 × 1350",
-    theme: "Mulheres",
-    date: "23 ago",
-    driveId: "1do57YPL8O644qbhI1260b1H1zZwFqpfk",
-    caption:
-      "Chegou a hora de ampliar a voz das mulheres e transformar coragem em ação. Eu estou com Juliana 1020!",
-    image: "/media/agora-e-a-vez.webp",
+    id: "habitacao",
+    title: "Habitação e casa própria",
+    kicker: "Moradia digna",
+    summary:
+      "Trabalho para ampliar o acesso à casa própria e mudar a realidade de famílias de baixa renda.",
+    stat: "110",
+    statLabel: "moradias entregues ou em construção",
+    points: [
+      "50 unidades entregues em parceria com o Governo do Estado.",
+      "Economia de recursos permitiu entregar outras 10 casas.",
+      "Mais 50 unidades estão em construção.",
+    ],
+    image: "/media/a-cada-tijolo.jpg",
+    icon: HomeIcon,
+    tone: "yellow",
+  },
+  {
+    id: "saude",
+    title: "Saúde forte perto de casa",
+    kicker: "Descentralização",
+    summary:
+      "Fortalecer o Hospital Regional de Água Boa para reduzir viagens e levar serviços complexos ao interior.",
+    stat: "11",
+    statLabel: "municípios atendidos pelo hospital",
+    points: [
+      "Ampliação dos serviços, incluindo hemodiálise.",
+      "Perspectiva de procedimentos de maior complexidade.",
+      "Menos deslocamentos para grandes centros e capitais.",
+    ],
+    image: "/media/juliana-31.jpg",
+    icon: Hospital,
+    tone: "green",
+  },
+  {
+    id: "idosos",
+    title: "Respeito e cuidado com a pessoa idosa",
+    kicker: "Melhor idade",
+    summary:
+      "Convivência, lazer, acolhimento e uma estrutura regional preparada para cuidar de quem construiu nossa história.",
+    stat: "1",
+    statLabel: "ILPI regional em construção",
+    points: [
+      "Encontros, viagens, festas culturais e integração social.",
+      "Ações permanentes para qualidade de vida e pertencimento.",
+      "Instituição de Longa Permanência planejada como referência regional.",
+    ],
+    image: "/media/melhor-idade.webp",
+    icon: HandHeart,
+    tone: "orange",
   },
   {
     id: "araguaia",
-    title: "Em defesa do Vale do Araguaia",
-    type: "Artes",
-    format: "Feed 1080 × 1350",
-    theme: "Araguaia",
-    date: "23 ago",
-    driveId: "1zFh-2DySkIEwRyVsamHIIVBk0AQtjL3Q",
-    caption:
-      "O Vale do Araguaia merece representação, investimento e respeito. A força do Araguaia em ação é Juliana 1020.",
+    title: "Desenvolvimento com segurança jurídica",
+    kicker: "Vale do Araguaia",
+    summary:
+      "Atuação firme contra o PL 909/2024 e seus possíveis impactos sobre cidades, produtores e áreas produtivas.",
+    stat: "34 mil+",
+    statLabel: "propriedades alcançadas pelo projeto",
+    points: [
+      "Solicitou análise também pela Comissão de Agricultura.",
+      "Pediu audiência pública e foi relatora da proposta.",
+      "Apresentou parecer pela rejeição do corredor ecológico.",
+    ],
     image: "/media/vale-do-araguaia.webp",
-  },
-  {
-    id: "no-ar",
-    title: "Juliana no ar",
-    type: "Artes",
-    format: "Feed 1080 × 1350",
-    theme: "Campanha",
-    date: "23 ago",
-    driveId: "1OMV6fysLgyU7SZZW4s0wWs0P3-Glv9xX",
-    caption:
-      "A nossa mensagem está no ar! Compartilhe com seus amigos e venha fazer parte desse movimento. Juliana 1020.",
-    image: "/media/juliana-no-ar.webp",
-  },
-  {
-    id: "melhor-idade",
-    title: "Compromisso com a melhor idade",
-    type: "Artes",
-    format: "Feed 1080 × 1350",
-    theme: "Melhor idade",
-    date: "23 ago",
-    driveId: "1fcEoxTKIzFt8UMPa8RpKTaA8pchqJXJz",
-    caption:
-      "Cuidar de quem construiu nossa história é compromisso. Mais respeito, saúde e qualidade de vida para a melhor idade.",
-    image: "/media/melhor-idade.webp",
-  },
-  {
-    id: "vila-lilas",
-    title: "Vila Lilás",
-    type: "Artes",
-    format: "Feed 1080 × 1350",
-    theme: "Mulheres",
-    date: "23 ago",
-    driveId: "1jO6nkCNjYRdHn4ITjl10kWkPE4eMTEN6",
-    caption:
-      "A Vila Lilás é acolhimento, proteção e oportunidade para as mulheres. Vamos fazer essa ideia chegar mais longe.",
-    image: "/media/vila-lilas.webp",
-  },
-  {
-    id: "foto-1",
-    title: "Foto oficial — Juliana",
-    type: "Fotos",
-    format: "JPG alta resolução",
-    theme: "Fotos oficiais",
-    date: "9 ago",
-    driveId: "1sH_Ihl9fqgkYKjYvGd29VzwF6CjTGORD",
-    caption:
-      "A força da mulher em ação. Juliana, deputada federal, é 1020!",
-    image: "/media/juliana-oficial-1.jpg",
-  },
-  {
-    id: "foto-2",
-    title: "Retrato oficial — Juliana",
-    type: "Fotos",
-    format: "JPG alta resolução",
-    theme: "Fotos oficiais",
-    date: "9 ago",
-    driveId: "1WpfnLRaZCrp8U86_ibmtYSIc7BLARjnS",
-    caption:
-      "Coragem, experiência e trabalho por Mato Grosso. Eu estou com Juliana 1020!",
-    image: "/media/juliana-oficial-2.jpg",
+    icon: Leaf,
+    tone: "blue",
   },
   {
     id: "pronaf",
-    title: "Pronaf: apoio a quem produz",
-    type: "Vídeos",
-    format: "Vídeo MP4",
-    theme: "Agro",
-    date: "20 ago",
-    driveId: "1ziDWI5rXAyFJ8jwkYalgIlAMwRVusFrw",
-    caption:
-      "Crédito, apoio e oportunidade para quem coloca alimento na mesa dos brasileiros. Assista e compartilhe.",
-    image: "/media/juliana-oficial-1.jpg",
-    accent: "green",
-  },
-  {
-    id: "habitacao-video",
-    title: "Habitação é dignidade",
-    type: "Vídeos",
-    format: "Vídeo MP4",
-    theme: "Habitação",
-    date: "11 ago",
-    driveId: "1z4L6jR26v5i2pxXC5skrkNIvDK2sehCw",
-    caption:
-      "Casa própria é segurança, dignidade e futuro. Conheça a proposta da Juliana para habitação.",
-    image: "/media/juliana-hero.jpg",
-    accent: "yellow",
-  },
-  {
-    id: "jingle",
-    title: "Jingle oficial — Juliana 1020",
-    type: "Áudios",
-    format: "Áudio MP3",
-    theme: "Campanha",
-    date: "22 ago",
-    driveId: "1MEj_U1DON6sKNaMH0BhtdOOEhZvQN5PR",
-    caption:
-      "Dê o play, compartilhe e leve a força da Juliana 1020 para todo Mato Grosso!",
-    accent: "blue",
-  },
-  {
-    id: "grafica",
-    title: "Kit para gráfica e mobilização",
-    type: "Impressos",
-    format: "PDF para impressão",
-    theme: "Campanha",
-    date: "23 ago",
-    driveId: "folder:18Il6nfz7aQ_FWmCyG8IrU45PB3SJM8u5",
-    caption:
-      "Baixe os arquivos oficiais de adesivo, bandeira, praguinha, santinho e wind banner.",
-    accent: "yellow",
+    title: "Crédito para a agricultura familiar",
+    kicker: "Pronaf",
+    summary:
+      "Relatoria que ajudou a ampliar as garantias para quem produz alimento e movimenta a economia no campo.",
+    stat: "R$ 500 mi",
+    statLabel: "em garantias adicionais de crédito",
+    points: [
+      "Aporte adicional no Fundo Garantidor de Operações.",
+      "Mais acesso ao financiamento para agricultores familiares.",
+      "Texto aprovado e transformado na Lei nº 15.034/2024.",
+    ],
+    image: "/media/juliana-34.jpg",
+    icon: Tractor,
+    tone: "lime",
   },
 ];
 
-const typeFilters = ["Todos", "Artes", "Vídeos", "Fotos", "Áudios", "Impressos"];
-const themeFilters = ["Todos", "Mulheres", "Araguaia", "Agro", "Habitação", "Campanha"];
+const biographySteps = [
+  {
+    year: "Raízes",
+    title: "Do Paraná para uma vida de desafios",
+    text: "Nascida em Palmas, no Paraná, Juliana é filha de Ivete Souza e Nelson Souza e cresceu em uma família de quatro mulheres. Desde cedo aprendeu o valor do trabalho, da coragem e da união.",
+  },
+  {
+    year: "2007",
+    title: "Água Boa virou casa",
+    text: "Ao lado do marido, o médico Mariano Kolankiewicz Filho, conheceu Água Boa por causa das raízes rurais de seu pai na região. O casal escolheu a cidade para viver e criar Nelson, José Pedro e Helena.",
+  },
+  {
+    year: "Gestão",
+    title: "Política feita perto das pessoas",
+    text: "Como secretária de Assistência Social, liderou ações de habitação, cuidado com idosos e oficinas de qualificação para mulheres, sempre com a ideia de criar autonomia e novas oportunidades.",
+  },
+  {
+    year: "2022",
+    title: "16.385 votos e uma voz que ganhou força",
+    text: "A convite de Otaviano Pivetta, disputou sua primeira eleição para deputada federal. A votação a colocou como suplente e confirmou a força de um projeto nascido no Vale do Araguaia.",
+  },
+  {
+    year: "2024",
+    title: "Quatro meses de mandato, trabalho que ficou",
+    text: "Assumiu uma cadeira na Câmara dos Deputados e atuou em pautas decisivas: foi relatora do Pronaf e enfrentou projetos com potencial de travar o desenvolvimento regional.",
+  },
+  {
+    year: "Agora",
+    title: "A candidata a Deputada do Araguaia",
+    text: "Veterinária, mãe e candidata a deputada federal pelo Republicanos, Juliana trabalha para garantir quatro anos de representação permanente ao Vale do Araguaia em Brasília.",
+  },
+];
 
-const driveDownload = (id: string) =>
-  id.startsWith("folder:")
-    ? `https://drive.google.com/drive/folders/${id.replace("folder:", "")}`
-    : `https://drive.usercontent.google.com/download?id=${id}&export=download&confirm=t`;
+const categoryCards: Array<{
+  label: MaterialKind;
+  count: number;
+  description: string;
+  icon: LucideIcon;
+}> = [
+  { label: "Vídeos", count: archiveCounts.videos, description: "Agenda, propostas e mobilização", icon: Video },
+  { label: "Fotos", count: archiveCounts.photos, description: "Retratos oficiais em alta", icon: Camera },
+  { label: "Músicas", count: archiveCounts.audios, description: "Jingles e versões oficiais", icon: Music2 },
+  { label: "Artes", count: archiveCounts.arts, description: "Posts prontos para compartilhar", icon: ImageIcon },
+  { label: "Logos", count: archiveCounts.logos, description: "Assinaturas da identidade", icon: BadgeCheck },
+  { label: "Impressos", count: archiveCounts.prints, description: "Arquivos prontos para gráfica", icon: FileText },
+];
 
 const normalize = (value: string) =>
   value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
+    .toLocaleLowerCase("pt-BR");
 
-function MaterialVisual({ material }: { material: Material }) {
-  if (material.image) {
+const materialHref = (material: Material) => {
+  if (material.localFile) return material.localFile;
+  if (material.folderId) return driveFolder(material.folderId);
+  if (material.driveId) return driveView(material.driveId);
+  return "#";
+};
+
+const materialDownloadHref = (material: Material) => {
+  if (material.localFile) return material.localFile;
+  if (material.folderId) return driveFolder(material.folderId);
+  if (material.driveId) return driveDownload(material.driveId);
+  return "#";
+};
+
+const kindIcon: Record<MaterialKind, LucideIcon> = {
+  Fotos: Camera,
+  Vídeos: Video,
+  Músicas: Music2,
+  Artes: ImageIcon,
+  Logos: BadgeCheck,
+  Impressos: FileText,
+  Documentos: BookOpen,
+  Identidade: Sparkles,
+};
+
+function MaterialArtwork({ material }: { material: Material }) {
+  const Icon = kindIcon[material.kind];
+
+  if (material.thumb) {
     return (
-      <div className={`material-visual ${material.type === "Vídeos" ? "is-video" : ""}`}>
-        <img src={material.image} alt="" />
-        {material.type === "Vídeos" ? <span className="play-button" aria-hidden="true">▶</span> : null}
-        <span className="material-format">{material.type}</span>
+      <div className={`archive-artwork ${material.kind === "Logos" ? "logo-artwork" : ""}`}>
+        <img src={material.thumb} alt={`Prévia de ${material.title}`} loading="lazy" />
+        {material.kind === "Vídeos" ? (
+          <span className="play-orb" aria-hidden="true"><Play size={19} fill="currentColor" /></span>
+        ) : null}
+        <span className="kind-chip">{material.kind}</span>
       </div>
     );
   }
 
   return (
-    <div className={`material-visual abstract ${material.accent ?? "blue"}`}>
-      <div className="abstract-rings" />
-      <span className="abstract-symbol" aria-hidden="true">
-        {material.type === "Áudios" ? "♪" : "PDF"}
-      </span>
-      <strong>{material.type === "Áudios" ? "JULIANA 1020" : "MATERIAIS OFICIAIS"}</strong>
-      <span className="material-format">{material.type}</span>
+    <div className={`archive-artwork abstract-artwork abstract-${material.kind.toLowerCase()}`}>
+      <span className="abstract-number">1020</span>
+      <Icon size={34} strokeWidth={1.8} />
+      <strong>{material.kind}</strong>
+      <span className="kind-chip">{material.format}</span>
+    </div>
+  );
+}
+
+function MaterialCard({
+  material,
+  onPreview,
+  onShare,
+}: {
+  material: Material;
+  onPreview: (material: Material) => void;
+  onShare: (material: Material) => void;
+}) {
+  const canPreview = material.kind === "Vídeos" || Boolean(material.thumb);
+  const isAudio = material.kind === "Músicas" && material.driveId;
+
+  return (
+    <article className="archive-card">
+      <button
+        className="artwork-button"
+        type="button"
+        onClick={() => (canPreview ? onPreview(material) : window.open(materialHref(material), "_blank", "noopener,noreferrer"))}
+        aria-label={`${canPreview ? "Visualizar" : "Abrir"} ${material.title}`}
+      >
+        <MaterialArtwork material={material} />
+      </button>
+      <div className="archive-card-body">
+        <div className="archive-meta">
+          <span>{material.theme}</span>
+          <small>{material.format}</small>
+        </div>
+        <h3>{material.title}</h3>
+        {material.description ? <p>{material.description}</p> : null}
+        {isAudio ? (
+          // Jingles are music files; there is no spoken-word caption track.
+          // eslint-disable-next-line jsx-a11y/media-has-caption
+          <audio controls preload="none" src={driveDownload(material.driveId!)}>
+            Seu navegador não suporta áudio.
+          </audio>
+        ) : null}
+        <div className="archive-actions">
+          <a href={materialDownloadHref(material)} target="_blank" rel="noreferrer" download={Boolean(material.localFile)}>
+            <Download size={15} /> Baixar
+          </a>
+          <button type="button" onClick={() => onShare(material)} aria-label={`Compartilhar ${material.title}`}>
+            <Share2 size={15} />
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function MaterialModal({ material, onClose }: { material: Material; onClose: () => void }) {
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [onClose]);
+
+  return (
+    <div className="media-modal" role="dialog" aria-modal="true" aria-label={material.title}>
+      <div className="media-dialog">
+        <button className="modal-close" type="button" onClick={onClose} aria-label="Fechar visualização"><X /></button>
+        <div className="modal-stage">
+          {material.kind === "Vídeos" && material.driveId ? (
+            <iframe src={drivePreview(material.driveId)} title={material.title} allow="autoplay; fullscreen" />
+          ) : material.thumb ? (
+            <img src={material.thumb.replace(/sz=w\d+/, "sz=w1600")} alt={material.title} />
+          ) : null}
+        </div>
+        <div className="modal-copy">
+          <span>{material.kind} • {material.theme}</span>
+          <h3>{material.title}</h3>
+          <div>
+            <a className="button button-primary" href={materialDownloadHref(material)} target="_blank" rel="noreferrer"><Download size={17} /> Baixar arquivo</a>
+            <a className="button button-soft" href={materialHref(material)} target="_blank" rel="noreferrer"><FolderOpen size={17} /> Abrir no Drive</a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default function Home() {
   const [query, setQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState("Todos");
+  const [typeFilter, setTypeFilter] = useState<(typeof typeFilters)[number]>("Todos");
   const [themeFilter, setThemeFilter] = useState("Todos");
+  const [visibleCount, setVisibleCount] = useState(18);
+  const [activeProposal, setActiveProposal] = useState(proposals[0].id);
+  const [modalMaterial, setModalMaterial] = useState<Material | null>(null);
   const [toast, setToast] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const [photoUrl, setPhotoUrl] = useState("");
-  const [frame, setFrame] = useState<"azul" | "verde" | "amarelo">("azul");
   const [zoom, setZoom] = useState(1);
-  const materialsRef = useRef<HTMLElement>(null);
+  const [panX, setPanX] = useState(0);
+  const [panY, setPanY] = useState(0);
+  const archiveRef = useRef<HTMLElement>(null);
+
+  const featured = useMemo(
+    () => featuredIds.map((id) => materials.find((material) => material.id === id)).filter(Boolean) as Material[],
+    [],
+  );
+
+  const themes = useMemo(
+    () => ["Todos", ...Array.from(new Set(materials.map((material) => material.theme))).sort((a, b) => a.localeCompare(b, "pt-BR"))],
+    [],
+  );
 
   const filteredMaterials = useMemo(() => {
     const search = normalize(query.trim());
     return materials.filter((material) => {
-      const matchesType = typeFilter === "Todos" || material.type === typeFilter;
+      const matchesType = typeFilter === "Todos" || material.kind === typeFilter;
       const matchesTheme = themeFilter === "Todos" || material.theme === themeFilter;
-      const haystack = normalize(
-        `${material.title} ${material.type} ${material.format} ${material.theme} ${material.caption}`,
-      );
+      const haystack = normalize(`${material.title} ${material.kind} ${material.format} ${material.theme} ${material.description ?? ""}`);
       return matchesType && matchesTheme && (!search || haystack.includes(search));
     });
-  }, [query, typeFilter, themeFilter]);
+  }, [query, themeFilter, typeFilter]);
 
   const notify = (message: string) => {
     setToast(message);
-    window.setTimeout(() => setToast(""), 2600);
+    window.setTimeout(() => setToast(""), 2800);
+  };
+
+  const chooseCategory = (kind: MaterialKind) => {
+    setTypeFilter(kind);
+    setThemeFilter("Todos");
+    setVisibleCount(18);
+    archiveRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const submitSearch = (event: FormEvent) => {
     event.preventDefault();
-    materialsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const chooseTheme = (theme: string) => {
-    setThemeFilter(theme);
-    materialsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const copyCaption = async (material: Material) => {
-    await navigator.clipboard.writeText(material.caption);
-    notify("Legenda copiada. Agora é só compartilhar!");
+    archiveRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const shareMaterial = async (material: Material) => {
-    const url = driveDownload(material.driveId);
+    const url = materialHref(material);
+    const text = `${material.title} — material oficial Juliana 1020`;
     try {
       if (navigator.share) {
-        await navigator.share({ title: material.title, text: material.caption, url });
-        return;
+        await navigator.share({ title: material.title, text, url });
+      } else {
+        await navigator.clipboard.writeText(`${text}\n${url}`);
+        notify("Link copiado para compartilhar!");
       }
-      window.open(
-        `https://wa.me/?text=${encodeURIComponent(`${material.caption}\n\n${url}`)}`,
-        "_blank",
-        "noopener,noreferrer",
-      );
     } catch (error) {
-      if (error instanceof Error && error.name !== "AbortError") {
-        notify("Não foi possível abrir o compartilhamento.");
-      }
+      if (error instanceof Error && error.name !== "AbortError") notify("Não foi possível compartilhar agora.");
     }
   };
 
@@ -269,6 +447,8 @@ export default function Home() {
     if (photoUrl) URL.revokeObjectURL(photoUrl);
     setPhotoUrl(URL.createObjectURL(file));
     setZoom(1);
+    setPanX(0);
+    setPanY(0);
   };
 
   const loadImage = (src: string) =>
@@ -279,469 +459,184 @@ export default function Home() {
       image.src = src;
     });
 
-  const downloadPersonalizedPhoto = async () => {
+  const downloadAvatar = async () => {
     if (!photoUrl) return;
     const [photo, logo] = await Promise.all([
       loadImage(photoUrl),
       loadImage("/media/juliana-logo.png"),
     ]);
+    const size = 1080;
     const canvas = document.createElement("canvas");
-    canvas.width = 1080;
-    canvas.height = 1080;
+    canvas.width = size;
+    canvas.height = size;
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    const scale = Math.max(canvas.width / photo.width, canvas.height / photo.height) * zoom;
-    const width = photo.width * scale;
-    const height = photo.height * scale;
-    context.drawImage(photo, (1080 - width) / 2, (1080 - height) / 2, width, height);
-
-    const colors = {
-      azul: ["#0d326f", "#194891"],
-      verde: ["#126a34", "#229e49"],
-      amarelo: ["#194891", "#194891"],
-    };
-    const gradient = context.createLinearGradient(0, 620, 0, 1080);
-    gradient.addColorStop(0, "rgba(8, 28, 60, 0)");
-    gradient.addColorStop(0.34, `${colors[frame][0]}cc`);
-    gradient.addColorStop(1, colors[frame][1]);
-    context.fillStyle = gradient;
-    context.fillRect(0, 540, 1080, 540);
-
-    context.fillStyle = frame === "amarelo" ? "#f7e02a" : frame === "verde" ? "#f7e02a" : "#229e49";
+    const center = size / 2;
+    const radius = 496;
+    const diameter = radius * 2;
+    context.clearRect(0, 0, size, size);
+    context.save();
     context.beginPath();
-    context.moveTo(760, 1080);
-    context.lineTo(1080, 820);
-    context.lineTo(1080, 1080);
-    context.closePath();
-    context.fill();
+    context.arc(center, center, radius - 18, 0, Math.PI * 2);
+    context.clip();
+    context.fillStyle = "#eaf1f9";
+    context.fillRect(0, 0, size, size);
+    const imageScale = Math.max(diameter / photo.width, diameter / photo.height) * zoom;
+    const drawWidth = photo.width * imageScale;
+    const drawHeight = photo.height * imageScale;
+    const offsetX = (panX / 100) * diameter * 0.36;
+    const offsetY = (panY / 100) * diameter * 0.36;
+    context.drawImage(photo, center - drawWidth / 2 + offsetX, center - drawHeight / 2 + offsetY, drawWidth, drawHeight);
+    const shade = context.createLinearGradient(0, 570, 0, 1030);
+    shade.addColorStop(0, "rgba(13,50,111,0)");
+    shade.addColorStop(1, "rgba(13,50,111,.54)");
+    context.fillStyle = shade;
+    context.fillRect(0, 530, size, 550);
+    context.restore();
 
-    const logoWidth = 760;
-    const logoHeight = (logo.height / logo.width) * logoWidth;
-    context.drawImage(logo, 68, 1080 - logoHeight - 58, logoWidth, logoHeight);
+    context.lineWidth = 34;
+    context.strokeStyle = "#194891";
+    context.beginPath();
+    context.arc(center, center, radius, 0, Math.PI * 2);
+    context.stroke();
+    context.lineWidth = 18;
+    context.strokeStyle = "#F7E02A";
+    context.beginPath();
+    context.arc(center, center, radius - 17, -Math.PI * 0.88, -Math.PI * 0.15);
+    context.stroke();
+    context.strokeStyle = "#229E49";
+    context.beginPath();
+    context.arc(center, center, radius - 17, Math.PI * 0.12, Math.PI * 0.77);
+    context.stroke();
+
+    const badgeX = 180;
+    const badgeY = 785;
+    const badgeWidth = 720;
+    const badgeHeight = 190;
+    context.fillStyle = "rgba(13,50,111,.96)";
+    context.beginPath();
+    context.roundRect(badgeX, badgeY, badgeWidth, badgeHeight, 48);
+    context.fill();
+    context.fillStyle = "#F7E02A";
+    context.font = "800 27px Arial";
+    context.textAlign = "center";
+    context.fillText("EU TÔ COM A DEPUTADA DO ARAGUAIA", center, badgeY + 43);
+    const logoScale = Math.min(610 / logo.width, 122 / logo.height);
+    const logoWidth = logo.width * logoScale;
+    const logoHeight = logo.height * logoScale;
+    context.drawImage(logo, center - logoWidth / 2, badgeY + 55, logoWidth, logoHeight);
 
     canvas.toBlob((blob) => {
       if (!blob) return;
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "eu-estou-com-juliana-1020.png";
+      link.href = url;
+      link.download = "avatar-juliana-1020.png";
       link.click();
-      URL.revokeObjectURL(link.href);
-      notify("Sua foto ficou pronta!");
+      URL.revokeObjectURL(url);
+      notify("Avatar pronto! Agora é só usar no seu perfil.");
     }, "image/png");
   };
+
+  const selectedProposal = proposals.find((proposal) => proposal.id === activeProposal) ?? proposals[0];
+  const ProposalIcon = selectedProposal.icon;
 
   return (
     <main>
       <header className="site-header">
-        <a className="brand" href="#inicio" aria-label="Central Juliana 1020">
-          <img src="/media/juliana-logo.png" alt="Juliana 1020" />
-        </a>
-        <nav aria-label="Navegação principal">
-          <a href="#historia">Quem é Juliana</a>
-          <a href="#materiais">Materiais</a>
-          <a href="#propostas">Propostas</a>
-          <a href="#foto">Minha foto</a>
+        <a className="brand" href="#inicio" aria-label="Central Juliana 1020"><img src="/media/juliana-logo.png" alt="Juliana 1020" /></a>
+        <nav className={menuOpen ? "open" : ""} aria-label="Navegação principal">
+          <a href="#materiais" onClick={() => setMenuOpen(false)}>Materiais</a>
+          <a href="#propostas" onClick={() => setMenuOpen(false)}>Propostas</a>
+          <a href="#historia" onClick={() => setMenuOpen(false)}>Quem é Juliana</a>
+          <a href="#avatar" onClick={() => setMenuOpen(false)}>Minha foto</a>
           <a href="https://whatsapp.com/channel/0029Vb8J3XW8F2p68rcnif34" target="_blank" rel="noreferrer">Figurinhas</a>
         </nav>
-        <a className="header-action" href="#materiais">Explorar materiais</a>
+        <a className="header-cta" href="#materiais"><Download size={17} /> Baixar materiais</a>
+        <button className="menu-button" type="button" onClick={() => setMenuOpen((value) => !value)} aria-label="Abrir menu" aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
       </header>
 
       <section className="hero" id="inicio">
+        <div className="hero-glow hero-glow-one" /><div className="hero-glow hero-glow-two" />
         <div className="hero-copy">
-          <span className="eyebrow"><i /> Central oficial de conteúdos</span>
-          <h1>Tudo para você apoiar, compartilhar e fazer parte.</h1>
-          <p>
-            Encontre fotos, vídeos, artes, propostas e conteúdos prontos da
-            Juliana 1020 em poucos segundos.
-          </p>
-          <form className="hero-search" role="search" onSubmit={submitSearch}>
-            <span aria-hidden="true">⌕</span>
-            <input
-              aria-label="Buscar materiais"
-              placeholder="Busque por saúde, mulheres, Araguaia..."
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-            <button type="submit">Buscar</button>
+          <span className="eyebrow"><span /> Central oficial de campanha</span>
+          <h1>Tudo da Juliana.<br /><em>Pronto para usar.</em></h1>
+          <p>Fotos, vídeos, músicas, propostas, artes e arquivos oficiais para levar a força do Vale do Araguaia ainda mais longe.</p>
+          <form className="hero-search" onSubmit={submitSearch}>
+            <Search size={22} /><input value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="Busque por vídeo, saúde, Araguaia, jingle..." aria-label="Buscar materiais" /><button type="submit">Encontrar</button>
           </form>
-          <div className="quick-links" aria-label="Atalhos de conteúdo">
-            {[
-              ["Fotos", "Fotos"],
-              ["Artes", "Artes"],
-              ["Vídeos", "Vídeos"],
-              ["Propostas", "Todos"],
-            ].map(([label, filter]) => (
-              <button
-                type="button"
-                key={label}
-                onClick={() => {
-                  setTypeFilter(filter);
-                  materialsRef.current?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                {label}
-              </button>
-            ))}
+          <div className="hero-actions">
+            <a className="button button-yellow" href="#materiais"><FolderOpen size={18} /> Explorar {archiveCounts.total} arquivos</a>
+            <a className="button button-ghost-light" href="#avatar"><CircleUserRound size={18} /> Criar meu avatar</a>
           </div>
+          <div className="hero-proof"><span><Check size={14} /> Download direto</span><span><Check size={14} /> Organizado por tema</span><span><Check size={14} /> Feito para celular</span></div>
         </div>
-
-        <div className="hero-visual" aria-label="Juliana 1020">
-          <div className="hero-orbit orbit-one" />
-          <div className="hero-orbit orbit-two" />
-          <img className="hero-person" src="/media/juliana-hero.jpg" alt="Juliana sorrindo e mostrando o número 10 com as mãos" />
-          <div className="floating-card latest-pill">
-            <span>Novos materiais</span>
-            <strong>Atualizados hoje</strong>
-          </div>
-          <div className="floating-card content-count">
-            <strong>+100</strong>
-            <span>conteúdos prontos</span>
-          </div>
+        <div className="hero-visual" aria-label="Fotos oficiais de Juliana">
+          <span className="hero-number">1020</span>
+          <div className="hero-photo main-photo"><img src="/media/juliana-34.jpg" alt="Juliana, candidata a deputada federal" /></div>
+          <div className="hero-photo mini-photo photo-a"><img src="/media/juliana-17.jpg" alt="Juliana em foto oficial" /></div>
+          <div className="hero-photo mini-photo photo-b"><img src="/media/juliana-45.jpg" alt="Juliana em foto oficial" /></div>
+          <div className="floating-label label-top"><Sparkles size={15} /> Deputada do Araguaia</div>
+          <div className="floating-label label-bottom"><strong>{archiveCounts.videos}</strong><span>vídeos para assistir<br />e compartilhar</span></div>
+          <img className="hero-symbol" src="/media/juliana-simbolo.png" alt="" />
         </div>
       </section>
 
-      <section className="trust-strip" aria-label="Vantagens da central">
-        <div><span aria-hidden="true">✓</span><strong>Conteúdo oficial</strong><small>Materiais da campanha</small></div>
-        <div><span aria-hidden="true">↻</span><strong>Sempre atualizado</strong><small>Novidades em um só lugar</small></div>
-        <div><span aria-hidden="true">↗</span><strong>Pronto para compartilhar</strong><small>Baixe, copie e envie</small></div>
+      <section className="archive-summary" aria-label="Resumo do acervo">
+        <div><strong>{archiveCounts.total}</strong><span>arquivos<br />mapeados</span></div><div><strong>{archiveCounts.photos}</strong><span>fotos<br />oficiais</span></div><div><strong>{archiveCounts.videos}</strong><span>vídeos<br />completos</span></div><div><strong>{archiveCounts.audios}</strong><span>músicas<br />e jingles</span></div><div><strong>{archiveCounts.fonts}</strong><span>arquivos<br />de fonte</span></div>
       </section>
 
-      <section className="about-section" id="historia" aria-labelledby="about-title">
-        <div className="about-portrait">
-          <div className="about-photo-wrap">
-            <img src="/media/juliana-oficial-2.jpg" alt="Retrato de Juliana Kolankiewicz" />
-            <span className="about-number">1020</span>
-          </div>
-          <div className="about-slogan">
-            <small>Um projeto para representar a região</small>
-            <strong>A deputada do Araguaia.</strong>
-          </div>
-        </div>
-
-        <div className="about-intro">
-          <span className="eyebrow"><i /> Quem é Juliana</span>
-          <h2 id="about-title">Trabalho, família e compromisso com o Vale do Araguaia.</h2>
-          <p className="about-lead">
-            Juliana Rosa de Souza Kolankiewicz é médica-veterinária, mãe de
-            três filhos e pré-candidata a deputada federal pelo Republicanos.
-            Sua trajetória une cuidado com as pessoas, experiência pública e
-            a defesa de uma região que quer ter voz presente em Brasília.
-          </p>
-
-          <div className="about-stats" aria-label="Destaques da trajetória de Juliana">
-            <div><strong>16.385</strong><span>votos em sua primeira eleição</span></div>
-            <div><strong>4 meses</strong><span>de mandato na Câmara Federal</span></div>
-            <div><strong>1ª mulher</strong><span>do Araguaia na Câmara</span></div>
-            <div><strong>Republicanos</strong><span>pré-candidata federal</span></div>
-          </div>
-        </div>
-
-        <div className="about-story">
-          <div className="story-heading">
-            <span>Uma história construída passo a passo</span>
-            <h3>Das raízes no Paraná ao trabalho pelo Araguaia.</h3>
-          </div>
-          <ol className="story-timeline">
-            <li>
-              <span>Raízes</span>
-              <div>
-                <strong>Família, coragem e formação</strong>
-                <p>
-                  Nascida em Palmas, no Paraná, é filha de Ivete Souza e
-                  Nelson Souza e cresceu em uma família de quatro mulheres.
-                  Formou-se em Medicina Veterinária e aprendeu cedo a enfrentar
-                  desafios com trabalho e responsabilidade.
-                </p>
-              </div>
-            </li>
-            <li>
-              <span>2007</span>
-              <div>
-                <strong>Água Boa virou casa</strong>
-                <p>
-                  Mudou-se para Água Boa com o marido, o médico Mariano
-                  Kolankiewicz Filho. Foi na cidade que o casal construiu sua
-                  vida e criou Nelson, José Pedro e Helena.
-                </p>
-              </div>
-            </li>
-            <li>
-              <span>Serviço</span>
-              <div>
-                <strong>Cuidar e criar oportunidades</strong>
-                <p>
-                  Na Secretaria Municipal de Assistência Social, atuou em
-                  habitação para famílias de baixa renda, atenção aos idosos e
-                  oficinas de qualificação profissional para mulheres — com
-                  foco em autonomia e transformação duradoura.
-                </p>
-              </div>
-            </li>
-            <li>
-              <span>2022–24</span>
-              <div>
-                <strong>Do primeiro voto à Câmara Federal</strong>
-                <p>
-                  Em sua primeira disputa, recebeu 16.385 votos e ficou na
-                  suplência. Exerceu o mandato entre maio e outubro de 2024,
-                  levando as prioridades do Vale do Araguaia ao Congresso.
-                </p>
-              </div>
-            </li>
-          </ol>
-        </div>
-
-        <div className="about-cause">
-          <div>
-            <span className="eyebrow light">Atuação que deixou marca</span>
-            <h3>Desenvolvimento com responsabilidade e voz regional.</h3>
-            <p>
-              Na Câmara, Juliana pediu que o projeto do Corredor Ecológico
-              Onça-Pintada também fosse analisado pela Comissão de Agricultura,
-              promoveu o debate público e apresentou parecer pela rejeição da
-              proposta, apontando riscos para municípios, produtores e famílias
-              às margens dos rios Araguaia e Tocantins.
-            </p>
-          </div>
-          <div className="cause-points">
-            <article>
-              <span aria-hidden="true">◎</span>
-              <strong>Araguaia em primeiro plano</strong>
-              <p>Representação presente para infraestrutura, produção e qualidade de vida.</p>
-            </article>
-            <article>
-              <span aria-hidden="true">↗</span>
-              <strong>Experiência para fazer</strong>
-              <p>Um mandato completo para transformar quatro meses de trabalho em quatro anos de resultados.</p>
-            </article>
-          </div>
-          <small className="about-sources">
-            Dados eleitorais e legislativos conferidos na Câmara dos Deputados.
-            Informações familiares fornecidas pela campanha.
-          </small>
+      <section className="section category-section">
+        <div className="section-heading"><div><span className="eyebrow dark"><span /> Vá direto ao que precisa</span><h2>Uma central feita para<br />encontrar em segundos.</h2></div><p>Escolha uma categoria e veja cada arquivo disponível — sem pedir no grupo, sem esperar a equipe responder.</p></div>
+        <div className="category-grid">
+          {categoryCards.map((category, index) => { const Icon = category.icon; return <button type="button" className={`category-card category-${index + 1}`} key={category.label} onClick={() => chooseCategory(category.label)}><span className="category-icon"><Icon /></span><span className="category-count">{String(category.count).padStart(2, "0")}</span><strong>{category.label}</strong><small>{category.description}</small><span className="category-arrow"><ArrowRight size={17} /></span></button>; })}
         </div>
       </section>
 
-      <section className="section latest-section" aria-labelledby="latest-title">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow"><i /> Acabou de sair</span>
-            <h2 id="latest-title">Últimos materiais</h2>
-            <p>Conteúdos novos, organizados e prontos para circular.</p>
-          </div>
-          <button type="button" className="text-action" onClick={() => materialsRef.current?.scrollIntoView({ behavior: "smooth" })}>
-            Ver biblioteca completa <span aria-hidden="true">→</span>
-          </button>
-        </div>
-
-        <div className="latest-grid">
-          {materials.slice(0, 4).map((material) => (
-            <article className="latest-card" key={material.id}>
-              <MaterialVisual material={material} />
-              <div className="latest-card-body">
-                <span>{material.theme} · {material.date}</span>
-                <h3>{material.title}</h3>
-                <div className="mini-actions">
-                  <a href={driveDownload(material.driveId)} target="_blank" rel="noreferrer">Baixar</a>
-                  <button type="button" onClick={() => shareMaterial(material)}>Compartilhar</button>
-                </div>
-              </div>
-            </article>
-          ))}
+      <section className="blue-showcase">
+        <div className="showcase-heading"><div><span className="eyebrow light"><span /> Seleção da campanha</span><h2>Conteúdo que já<br />está em movimento.</h2></div><p>Assista, baixe e encaminhe. Os materiais abrem aqui e os arquivos originais continuam seguros no Drive.</p></div>
+        <div className="featured-track">
+          {featured.map((material, index) => <article className={`featured-card featured-${index + 1}`} key={material.id}>{material.thumb ? <img src={material.thumb} alt={`Prévia de ${material.title}`} /> : <div className="music-cover"><Music2 /><span>JULIANA</span><strong>1020</strong></div>}<div className="featured-overlay"><span>{material.kind}</span><h3>{material.title}</h3><button type="button" onClick={() => material.kind === "Músicas" ? window.open(materialHref(material), "_blank", "noopener,noreferrer") : setModalMaterial(material)}>{material.kind === "Vídeos" ? <Play size={16} fill="currentColor" /> : <ArrowDownToLine size={16} />}{material.kind === "Vídeos" ? "Assistir" : "Abrir"}</button></div></article>)}
         </div>
       </section>
 
-      <section className="photo-builder" id="foto" aria-labelledby="photo-title">
-        <div className="photo-builder-copy">
-          <span className="eyebrow light">Sua foto, nossa força</span>
-          <h2 id="photo-title">Mostre que você está com a Juliana 1020.</h2>
-          <p>
-            Escolha uma foto, ajuste o enquadramento e baixe sua arte oficial.
-            Tudo acontece no seu aparelho, com privacidade.
-          </p>
-
-          <div className="builder-steps" aria-label="Como criar sua foto">
-            <div><b>1</b><span><strong>Envie sua foto</strong><small>JPG ou PNG do seu aparelho</small></span></div>
-            <div><b>2</b><span><strong>Escolha a moldura</strong><small>Azul, verde ou amarela</small></span></div>
-            <div><b>3</b><span><strong>Baixe e compartilhe</strong><small>Pronta para Feed e WhatsApp</small></span></div>
-          </div>
-
-          <label className="upload-button">
-            <input type="file" accept="image/png,image/jpeg" onChange={(event) => handlePhoto(event.target.files?.[0])} />
-            <span aria-hidden="true">＋</span>
-            {photoUrl ? "Trocar foto" : "Escolher minha foto"}
-          </label>
-          <small className="privacy-note">🔒 Sua imagem não é enviada nem armazenada.</small>
+      <section className="story-section" id="historia">
+        <div className="story-intro">
+          <div className="story-photo-stack"><div className="story-photo story-photo-main"><img src="/media/juliana-27.jpg" alt="Retrato de Juliana" /></div><div className="story-photo story-photo-small"><img src="/media/juliana-39.jpg" alt="Juliana em foto oficial" /></div><div className="story-stamp"><span>16.385</span><small>votos em sua<br />primeira eleição</small></div></div>
+          <div className="story-copy"><span className="eyebrow dark"><span /> Quem é Juliana</span><h2>Uma história de família, trabalho e coragem para agir.</h2><p className="story-lead">Juliana Kolankiewicz é médica-veterinária, mãe de três filhos e candidata a deputada federal pelo Republicanos. Sua vida pública nasceu do trabalho social em Água Boa e ganhou o Vale do Araguaia.</p><blockquote>“O Araguaia merece uma voz presente todos os dias em Brasília.”</blockquote><div className="story-tags"><span><HeartHandshake size={16} /> Família</span><span><UsersRound size={16} /> Trabalho social</span><span><Building2 size={16} /> Experiência</span></div></div>
         </div>
-
-        <div className="builder-workspace">
-          <div className={`photo-frame ${frame}`}>
-            {photoUrl ? (
-              <img src={photoUrl} alt="Prévia da sua foto" style={{ transform: `scale(${zoom})` }} />
-            ) : (
-              <div className="empty-photo">
-                <span aria-hidden="true">◎</span>
-                <strong>Sua foto aparece aqui</strong>
-                <small>Escolha uma imagem para começar</small>
-              </div>
-            )}
-            <div className="frame-gradient" />
-            <img className="frame-logo" src="/media/juliana-logo.png" alt="" />
-            <div className="frame-accent" />
-          </div>
-
-          <div className="builder-controls">
-            <div className="frame-options" aria-label="Escolher cor da moldura">
-              {(["azul", "verde", "amarelo"] as const).map((color) => (
-                <button
-                  type="button"
-                  key={color}
-                  className={`${color} ${frame === color ? "active" : ""}`}
-                  aria-label={`Moldura ${color}`}
-                  aria-pressed={frame === color}
-                  onClick={() => setFrame(color)}
-                />
-              ))}
-            </div>
-            <label className="zoom-control">
-              <span>Enquadramento</span>
-              <input
-                type="range"
-                min="1"
-                max="1.6"
-                step="0.05"
-                value={zoom}
-                onChange={(event) => setZoom(Number(event.target.value))}
-                disabled={!photoUrl}
-              />
-            </label>
-            <button type="button" className="download-photo" disabled={!photoUrl} onClick={downloadPersonalizedPhoto}>
-              Baixar minha arte <span aria-hidden="true">↓</span>
-            </button>
-          </div>
-        </div>
+        <div className="biography-timeline">{biographySteps.map((step, index) => <article key={step.year}><span className="timeline-index">{String(index + 1).padStart(2, "0")}</span><small>{step.year}</small><h3>{step.title}</h3><p>{step.text}</p></article>)}</div>
+        <div className="story-manifesto"><div><span className="eyebrow light"><span /> Presença em Brasília</span><h3>Quatro meses mostraram o que é possível. Agora, o trabalho é por quatro anos.</h3></div><div className="manifesto-points"><span><strong>2024</strong> assumiu na Câmara</span><span><strong>PL 909</strong> defesa do Araguaia</span><span><strong>Pronaf</strong> relatoria aprovada</span><span><strong>Agora</strong> candidata federal</span></div></div>
       </section>
 
-      <section className="section library-section" id="materiais" ref={materialsRef} aria-labelledby="library-title">
-        <div className="section-heading library-heading">
-          <div>
-            <span className="eyebrow"><i /> Encontre em segundos</span>
-            <h2 id="library-title">Biblioteca de materiais</h2>
-            <p>Filtre por formato ou assunto. Cada item já vem com legenda pronta.</p>
-          </div>
-          <form className="library-search" role="search" onSubmit={submitSearch}>
-            <span aria-hidden="true">⌕</span>
-            <input aria-label="Buscar na biblioteca" placeholder="Buscar material..." value={query} onChange={(event) => setQuery(event.target.value)} />
-          </form>
-        </div>
-
-        <div className="filter-group" aria-label="Filtrar por formato">
-          {typeFilters.map((filter) => (
-            <button type="button" className={typeFilter === filter ? "active" : ""} key={filter} onClick={() => setTypeFilter(filter)}>
-              {filter}
-            </button>
-          ))}
-        </div>
-        <div className="theme-filter" aria-label="Filtrar por assunto">
-          <span>Por assunto:</span>
-          {themeFilters.map((filter) => (
-            <button type="button" className={themeFilter === filter ? "active" : ""} key={filter} onClick={() => setThemeFilter(filter)}>
-              {filter}
-            </button>
-          ))}
-        </div>
-
-        {filteredMaterials.length ? (
-          <div className="material-grid">
-            {filteredMaterials.map((material) => (
-              <article className="material-card" key={material.id}>
-                <MaterialVisual material={material} />
-                <div className="material-card-body">
-                  <div className="material-meta">
-                    <span>{material.theme}</span>
-                    <time>{material.date}</time>
-                  </div>
-                  <h3>{material.title}</h3>
-                  <small>{material.format}</small>
-                  <div className="card-actions">
-                    <a className="download-action" href={driveDownload(material.driveId)} target="_blank" rel="noreferrer">
-                      <span aria-hidden="true">↓</span> Baixar
-                    </a>
-                    <button type="button" aria-label={`Compartilhar ${material.title}`} onClick={() => shareMaterial(material)}>↗</button>
-                    <button type="button" aria-label={`Copiar legenda de ${material.title}`} onClick={() => copyCaption(material)}>Aa</button>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="empty-results">
-            <span aria-hidden="true">⌕</span>
-            <h3>Nenhum material encontrado</h3>
-            <p>Tente outra palavra ou limpe os filtros.</p>
-            <button type="button" onClick={() => { setQuery(""); setTypeFilter("Todos"); setThemeFilter("Todos"); }}>Limpar filtros</button>
-          </div>
-        )}
+      <section className="proposals-section" id="propostas">
+        <div className="section-heading proposals-heading"><div><span className="eyebrow dark"><span /> Projetos e bandeiras</span><h2>Propostas para ver,<br />entender e compartilhar.</h2></div><div className="heading-actions"><p>Informação direta, organizada por impacto — sem transformar a página em um texto longo.</p><a className="button button-primary" href="/media/propostas-juliana.pdf" target="_blank" rel="noreferrer"><FileText size={17} /> Baixar propostas em PDF</a></div></div>
+        <div className="proposal-selector">{proposals.map((proposal) => { const Icon = proposal.icon; const active = proposal.id === activeProposal; return <button type="button" key={proposal.id} className={`${proposal.tone} ${active ? "active" : ""}`} onClick={() => setActiveProposal(proposal.id)} aria-expanded={active}><span><Icon /></span><small>{proposal.kicker}</small><strong>{proposal.title}</strong><ChevronDown size={17} /></button>; })}</div>
+        <article className={`proposal-detail detail-${selectedProposal.tone}`}><div className="proposal-image"><img src={selectedProposal.image} alt={`Material sobre ${selectedProposal.title}`} /><span><ProposalIcon /> {selectedProposal.kicker}</span></div><div className="proposal-copy"><span className="proposal-overline">O que muda na prática</span><h3>{selectedProposal.title}</h3><p>{selectedProposal.summary}</p><div className="proposal-stat"><strong>{selectedProposal.stat}</strong><span>{selectedProposal.statLabel}</span></div><ul>{selectedProposal.points.map((point) => <li key={point}><Check />{point}</li>)}</ul></div></article>
       </section>
 
-      <section className="proposals" id="propostas" aria-labelledby="proposals-title">
-        <div className="proposal-intro">
-          <span className="eyebrow light">Ideias que viram ação</span>
-          <h2 id="proposals-title">Conheça as prioridades da Juliana.</h2>
-          <p>Informação clara para entender, conversar e compartilhar.</p>
-          <a href="#materiais">Ver todos os conteúdos <span aria-hidden="true">→</span></a>
-        </div>
-        <div className="proposal-grid">
-          {[
-            ["🌾", "Agro e produtor rural", "Crédito, infraestrutura e segurança para quem produz.", "Agro"],
-            ["♀", "Força das mulheres", "Proteção, autonomia e oportunidades em todas as regiões.", "Mulheres"],
-            ["♡", "Saúde perto de você", "Atendimento digno e estrutura para cuidar das pessoas.", "Todos"],
-            ["✦", "Vale do Araguaia", "Representação presente para destravar o desenvolvimento.", "Araguaia"],
-          ].map(([icon, title, description, theme]) => (
-            <button type="button" className="proposal-card" key={title} onClick={() => chooseTheme(theme)}>
-              <span aria-hidden="true">{icon}</span>
-              <strong>{title}</strong>
-              <small>{description}</small>
-              <i aria-hidden="true">→</i>
-            </button>
-          ))}
-        </div>
+      <section className="avatar-section" id="avatar">
+        <div className="avatar-copy"><span className="eyebrow light"><span /> Minha foto com Juliana</span><h2>Seu perfil também pode vestir essa campanha.</h2><p>Agora a montagem foi pensada para foto de perfil: formato circular, enquadramento protegido e assinatura oficial dentro da área que aparece no WhatsApp e no Instagram.</p><div className="avatar-steps"><span><b>1</b><i><strong>Envie sua foto</strong><small>Nada sai do seu aparelho</small></i></span><span><b>2</b><i><strong>Ajuste o rosto</strong><small>Zoom e posição em três controles</small></i></span><span><b>3</b><i><strong>Baixe o avatar</strong><small>PNG pronto para o perfil</small></i></span></div><label className="upload-button"><Upload size={18} /> Escolher minha foto<input type="file" accept="image/*" onChange={(event) => handlePhoto(event.target.files?.[0])} /></label><span className="privacy-note"><ShieldCheck size={14} /> Sua foto é processada apenas no navegador.</span></div>
+        <div className="avatar-workspace"><div className="avatar-preview-shell"><div className="avatar-preview">{photoUrl ? <img src={photoUrl} alt="Prévia da sua foto com a identidade Juliana" style={{ transform: `translate(${panX * 0.33}%, ${panY * 0.33}%) scale(${zoom})` }} /> : <div className="avatar-empty"><CircleUserRound /><strong>Sua foto aqui</strong><small>O recorte final será circular</small></div>}<div className="avatar-shade" /><div className="avatar-ring ring-yellow" /><div className="avatar-ring ring-green" /><div className="avatar-badge"><small>EU TÔ COM A DEPUTADA DO ARAGUAIA</small><img src="/media/juliana-logo.png" alt="Juliana 1020" /></div></div></div><div className="avatar-controls"><label><span>Zoom</span><input type="range" min="1" max="2.2" step="0.02" value={zoom} onChange={(event) => setZoom(Number(event.target.value))} /></label><label><span>Horizontal</span><input type="range" min="-55" max="55" step="1" value={panX} onChange={(event) => setPanX(Number(event.target.value))} /></label><label><span>Vertical</span><input type="range" min="-55" max="55" step="1" value={panY} onChange={(event) => setPanY(Number(event.target.value))} /></label></div><button className="button button-yellow download-avatar" type="button" disabled={!photoUrl} onClick={downloadAvatar}><Download size={18} /> Baixar avatar redondo</button></div>
       </section>
 
-      <section className="stickers-cta">
-        <div className="sticker-stack" aria-hidden="true">
-          <span>1020</span><span>JULIANA</span><span>✓</span>
-        </div>
-        <div>
-          <span className="eyebrow"><i /> Espalhe essa ideia</span>
-          <h2>Figurinhas oficiais no seu WhatsApp.</h2>
-          <p>Entre no canal, salve as suas favoritas e compartilhe com o time.</p>
-        </div>
-        <a href="https://whatsapp.com/channel/0029Vb8J3XW8F2p68rcnif34" target="_blank" rel="noreferrer">
-          Abrir canal de figurinhas <span aria-hidden="true">↗</span>
-        </a>
+      <section className="library-section" id="materiais" ref={archiveRef}>
+        <div className="library-heading"><div><span className="eyebrow dark"><span /> Acervo completo</span><h2>Nada escondido.<br />Tudo em um só lugar.</h2><p>{archiveCounts.total} arquivos mapeados nas pastas oficiais, incluindo {archiveCounts.videos} vídeos, {archiveCounts.photos} fotos e {archiveCounts.audios} músicas.</p></div><form className="library-search" onSubmit={submitSearch}><Search size={20} /><input value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="Buscar no acervo..." aria-label="Buscar no acervo" />{query ? <button type="button" onClick={() => { setQuery(""); setVisibleCount(18); }} aria-label="Limpar busca"><X size={17} /></button> : null}</form></div>
+        <div className="filter-scroll" aria-label="Filtrar por formato">{typeFilters.map((type) => <button type="button" key={type} className={typeFilter === type ? "active" : ""} onClick={() => { setTypeFilter(type); setVisibleCount(18); }}>{type}</button>)}</div>
+        <div className="theme-scroll" aria-label="Filtrar por tema">{themes.map((theme) => <button type="button" key={theme} className={themeFilter === theme ? "active" : ""} onClick={() => { setThemeFilter(theme); setVisibleCount(18); }}>{theme}</button>)}</div>
+        <div className="result-line"><strong>{filteredMaterials.length}</strong> itens ou coleções encontrados<span />Mostrando {Math.min(visibleCount, filteredMaterials.length)} agora</div>
+        {filteredMaterials.length ? <div className="archive-grid">{filteredMaterials.slice(0, visibleCount).map((material) => <MaterialCard key={material.id} material={material} onPreview={setModalMaterial} onShare={shareMaterial} />)}</div> : <div className="empty-results"><Search /><h3>Nenhum material encontrado</h3><p>Tente outra palavra ou limpe os filtros.</p><button type="button" onClick={() => { setQuery(""); setTypeFilter("Todos"); setThemeFilter("Todos"); setVisibleCount(18); }}>Limpar filtros</button></div>}
+        {visibleCount < filteredMaterials.length ? <button className="load-more" type="button" onClick={() => setVisibleCount((value) => value + 18)}>Mostrar mais 18 arquivos <ChevronDown /></button> : null}
+        <div className="folder-shortcuts"><span><FolderOpen /> Pastas originais do Drive</span><a href={driveFolder(collectionFolders.photos)} target="_blank" rel="noreferrer">Fotos</a><a href={driveFolder(collectionFolders.videos)} target="_blank" rel="noreferrer">Vídeos</a><a href={driveFolder(collectionFolders.audios)} target="_blank" rel="noreferrer">Músicas</a><a href={driveFolder(collectionFolders.arts)} target="_blank" rel="noreferrer">Artes</a><a href={driveFolder(collectionFolders.logos)} target="_blank" rel="noreferrer">Logos</a><a href={driveFolder(collectionFolders.prints)} target="_blank" rel="noreferrer">Gráfica</a></div>
       </section>
 
-      <footer>
-        <div className="footer-brand">
-          <img src="/media/juliana-logo.png" alt="Juliana 1020" />
-          <p>A força da mulher. A força do Araguaia. Em ação.</p>
-        </div>
-        <div className="footer-links">
-          <a href="#inicio">Início</a>
-          <a href="#historia">Quem é Juliana</a>
-          <a href="#materiais">Materiais</a>
-          <a href="#propostas">Propostas</a>
-          <a href="#foto">Minha foto</a>
-        </div>
-        <div className="footer-legal">
-          <strong>Central oficial Juliana 1020</strong>
-          <span>Propaganda eleitoral · Conteúdo demonstrativo</span>
-        </div>
-      </footer>
+      <section className="stickers-section"><div className="sticker-bubbles"><span>1020</span><span>💙</span><span>EU TÔ COM ELA</span><span>ARAGUAIA</span></div><div><span className="eyebrow light"><span /> Figurinhas no WhatsApp</span><h2>Coloque a Juliana nas suas conversas.</h2><p>Acesse o canal oficial, salve as figurinhas e compartilhe com seus contatos.</p></div><a className="button button-yellow" href="https://whatsapp.com/channel/0029Vb8J3XW8F2p68rcnif34" target="_blank" rel="noreferrer"><MessageCircle size={19} /> Abrir canal de figurinhas</a></section>
 
-      {toast ? <div className="toast" role="status">✓ {toast}</div> : null}
+      <footer><a className="footer-brand" href="#inicio"><img src="/media/juliana-logo.png" alt="Juliana 1020" /></a><p>Central oficial de materiais da campanha Juliana 1020 • Republicanos</p><div><a href="#materiais">Materiais</a><a href="#propostas">Propostas</a><a href="#historia">Quem é Juliana</a><a href="#avatar">Minha foto</a></div></footer>
+
+      {modalMaterial ? <MaterialModal material={modalMaterial} onClose={() => setModalMaterial(null)} /> : null}
+      {toast ? <div className="toast" role="status"><Check /> {toast}</div> : null}
     </main>
   );
 }

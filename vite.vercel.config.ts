@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
   root: "vercel",
-  publicDir: fileURLToPath(new URL("./vercel/public", import.meta.url)),
+  publicDir: fileURLToPath(new URL("./public", import.meta.url)),
   plugins: [react()],
   build: {
     outDir: fileURLToPath(new URL("./dist-vercel", import.meta.url)),
