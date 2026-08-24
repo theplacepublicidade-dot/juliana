@@ -338,6 +338,7 @@ export default function Home() {
           <img src="/media/juliana-logo.png" alt="Juliana 1020" />
         </a>
         <nav aria-label="Navegação principal">
+          <a href="#historia">Quem é Juliana</a>
           <a href="#materiais">Materiais</a>
           <a href="#propostas">Propostas</a>
           <a href="#foto">Minha foto</a>
@@ -404,6 +405,122 @@ export default function Home() {
         <div><span aria-hidden="true">✓</span><strong>Conteúdo oficial</strong><small>Materiais da campanha</small></div>
         <div><span aria-hidden="true">↻</span><strong>Sempre atualizado</strong><small>Novidades em um só lugar</small></div>
         <div><span aria-hidden="true">↗</span><strong>Pronto para compartilhar</strong><small>Baixe, copie e envie</small></div>
+      </section>
+
+      <section className="about-section" id="historia" aria-labelledby="about-title">
+        <div className="about-portrait">
+          <div className="about-photo-wrap">
+            <img src="/media/juliana-oficial-2.jpg" alt="Retrato de Juliana Kolankiewicz" />
+            <span className="about-number">1020</span>
+          </div>
+          <div className="about-slogan">
+            <small>Um projeto para representar a região</small>
+            <strong>A deputada do Araguaia.</strong>
+          </div>
+        </div>
+
+        <div className="about-intro">
+          <span className="eyebrow"><i /> Quem é Juliana</span>
+          <h2 id="about-title">Trabalho, família e compromisso com o Vale do Araguaia.</h2>
+          <p className="about-lead">
+            Juliana Rosa de Souza Kolankiewicz é médica-veterinária, mãe de
+            três filhos e pré-candidata a deputada federal pelo Republicanos.
+            Sua trajetória une cuidado com as pessoas, experiência pública e
+            a defesa de uma região que quer ter voz presente em Brasília.
+          </p>
+
+          <div className="about-stats" aria-label="Destaques da trajetória de Juliana">
+            <div><strong>16.385</strong><span>votos em sua primeira eleição</span></div>
+            <div><strong>4 meses</strong><span>de mandato na Câmara Federal</span></div>
+            <div><strong>1ª mulher</strong><span>do Araguaia na Câmara</span></div>
+            <div><strong>Republicanos</strong><span>pré-candidata federal</span></div>
+          </div>
+        </div>
+
+        <div className="about-story">
+          <div className="story-heading">
+            <span>Uma história construída passo a passo</span>
+            <h3>Das raízes no Paraná ao trabalho pelo Araguaia.</h3>
+          </div>
+          <ol className="story-timeline">
+            <li>
+              <span>Raízes</span>
+              <div>
+                <strong>Família, coragem e formação</strong>
+                <p>
+                  Nascida em Palmas, no Paraná, é filha de Ivete Souza e
+                  Nelson Souza e cresceu em uma família de quatro mulheres.
+                  Formou-se em Medicina Veterinária e aprendeu cedo a enfrentar
+                  desafios com trabalho e responsabilidade.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span>2007</span>
+              <div>
+                <strong>Água Boa virou casa</strong>
+                <p>
+                  Mudou-se para Água Boa com o marido, o médico Mariano
+                  Kolankiewicz Filho. Foi na cidade que o casal construiu sua
+                  vida e criou Nelson, José Pedro e Helena.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span>Serviço</span>
+              <div>
+                <strong>Cuidar e criar oportunidades</strong>
+                <p>
+                  Na Secretaria Municipal de Assistência Social, atuou em
+                  habitação para famílias de baixa renda, atenção aos idosos e
+                  oficinas de qualificação profissional para mulheres — com
+                  foco em autonomia e transformação duradoura.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span>2022–24</span>
+              <div>
+                <strong>Do primeiro voto à Câmara Federal</strong>
+                <p>
+                  Em sua primeira disputa, recebeu 16.385 votos e ficou na
+                  suplência. Exerceu o mandato entre maio e outubro de 2024,
+                  levando as prioridades do Vale do Araguaia ao Congresso.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div className="about-cause">
+          <div>
+            <span className="eyebrow light">Atuação que deixou marca</span>
+            <h3>Desenvolvimento com responsabilidade e voz regional.</h3>
+            <p>
+              Na Câmara, Juliana pediu que o projeto do Corredor Ecológico
+              Onça-Pintada também fosse analisado pela Comissão de Agricultura,
+              promoveu o debate público e apresentou parecer pela rejeição da
+              proposta, apontando riscos para municípios, produtores e famílias
+              às margens dos rios Araguaia e Tocantins.
+            </p>
+          </div>
+          <div className="cause-points">
+            <article>
+              <span aria-hidden="true">◎</span>
+              <strong>Araguaia em primeiro plano</strong>
+              <p>Representação presente para infraestrutura, produção e qualidade de vida.</p>
+            </article>
+            <article>
+              <span aria-hidden="true">↗</span>
+              <strong>Experiência para fazer</strong>
+              <p>Um mandato completo para transformar quatro meses de trabalho em quatro anos de resultados.</p>
+            </article>
+          </div>
+          <small className="about-sources">
+            Dados eleitorais e legislativos conferidos na Câmara dos Deputados.
+            Informações familiares fornecidas pela campanha.
+          </small>
+        </div>
       </section>
 
       <section className="section latest-section" aria-labelledby="latest-title">
@@ -613,6 +730,7 @@ export default function Home() {
         </div>
         <div className="footer-links">
           <a href="#inicio">Início</a>
+          <a href="#historia">Quem é Juliana</a>
           <a href="#materiais">Materiais</a>
           <a href="#propostas">Propostas</a>
           <a href="#foto">Minha foto</a>
