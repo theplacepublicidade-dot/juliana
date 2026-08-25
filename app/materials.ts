@@ -180,13 +180,14 @@ const videos: Material[] = videoFiles.map(([id, title]) => ({
   thumb: driveThumb(id),
 }));
 
-const audios: Material[] = audioFiles.map(([id, title]) => ({
+const audios: Material[] = audioFiles.map(([id, title], index) => ({
   id: `audio-${id}`,
   title,
   kind: "Músicas",
   format: "Áudio MP3",
   theme: "Jingles",
   driveId: id,
+  localFile: `/audio/jingle-${String(index + 1).padStart(2, "0")}.mp3`,
 }));
 
 const logos: Material[] = logoFiles.map(([id, title]) => ({

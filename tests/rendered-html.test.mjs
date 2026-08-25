@@ -31,8 +31,11 @@ test("server-renders the Juliana content hub", async () => {
   const html = await response.text();
   assert.match(html, /<title>Central Juliana 1020 \| Materiais oficiais<\/title>/i);
   assert.match(html, /id="historia"/);
-  assert.match(html, /Quem é Juliana/);
+  assert.match(html, /História e família/);
   assert.match(html, /16\.385/);
+  assert.match(html, /id="mandato"/);
+  assert.match(html, /28 votos a 7/);
+  assert.match(html, /R\$ 500 milhões/);
   assert.match(html, /Desenvolvimento com segurança jurídica/);
   assert.match(html, /id="avatar"/);
   assert.match(html, /id="materiais"/);
@@ -54,6 +57,7 @@ test("keeps photo personalization local and provides a Vercel build", async () =
   assert.match(page, /canvas\.toBlob/);
   assert.match(page, /URL\.revokeObjectURL/);
   assert.match(page, /Sua foto é processada apenas no navegador/);
+  assert.match(page, /material\.localFile \?\? driveDownload/);
   assert.match(vercelHtml, /Central Juliana 1020/);
   assert.match(vercelHtml, /og\.jpg/);
   assert.match(vercelConfig, /"framework": "vite"/);

@@ -160,14 +160,14 @@ const proposals: Array<{
     kicker: "Vale do Araguaia",
     summary:
       "Atuação firme contra o PL 909/2024 e seus possíveis impactos sobre cidades, produtores e áreas produtivas.",
-    stat: "34 mil+",
-    statLabel: "propriedades alcançadas pelo projeto",
+    stat: "quase 11 mi ha",
+    statLabel: "estimados na faixa analisada pelo parecer",
     points: [
-      "Solicitou análise também pela Comissão de Agricultura.",
-      "Pediu audiência pública e foi relatora da proposta.",
-      "Apresentou parecer pela rejeição do corredor ecológico.",
+      "Conseguiu incluir a Comissão de Agricultura na análise.",
+      "Pediu audiência pública e assumiu a relatoria da proposta.",
+      "Seu parecer pela rejeição foi aprovado por 28 votos a 7 na comissão.",
     ],
-    image: "/media/vale-do-araguaia.webp",
+    image: "/media/historia/juliana-plenario-collage.jpg",
     icon: Leaf,
     tone: "blue",
   },
@@ -184,7 +184,7 @@ const proposals: Array<{
       "Mais acesso ao financiamento para agricultores familiares.",
       "Texto aprovado e transformado na Lei nº 15.034/2024.",
     ],
-    image: "/media/juliana-34.jpg",
+    image: "/media/historia/agricultor-pronaf.jpg",
     icon: Tractor,
     tone: "lime",
   },
@@ -199,7 +199,7 @@ const biographySteps = [
   {
     year: "2007",
     title: "Água Boa virou casa",
-    text: "Ao lado do marido, o médico Mariano Kolankiewicz Filho, conheceu Água Boa por causa das raízes rurais de seu pai na região. O casal escolheu a cidade para viver e criar Nelson, José Pedro e Helena.",
+    text: "Ao lado do marido, o médico Mariano Kolankiewicz Filho, conheceu Água Boa por causa das raízes rurais de seu pai na região. O casal escolheu a cidade para viver e criar Nelson, José Pedro e Helena. Mariano é o atual prefeito, reeleito para o segundo mandato.",
   },
   {
     year: "Gestão",
@@ -325,7 +325,7 @@ function MaterialCard({
         {isAudio ? (
           // Jingles are music files; there is no spoken-word caption track.
           // eslint-disable-next-line jsx-a11y/media-has-caption
-          <audio controls preload="none" src={driveDownload(material.driveId!)}>
+          <audio controls preload="metadata" src={material.localFile ?? driveDownload(material.driveId!)}>
             Seu navegador não suporta áudio.
           </audio>
         ) : null}
@@ -397,6 +397,11 @@ export default function Home() {
 
   const themes = useMemo(
     () => ["Todos", ...Array.from(new Set(materials.map((material) => material.theme))).sort((a, b) => a.localeCompare(b, "pt-BR"))],
+    [],
+  );
+
+  const videoThemes = useMemo(
+    () => Array.from(new Set(materials.filter((material) => material.kind === "Vídeos").map((material) => material.theme))).sort((a, b) => a.localeCompare(b, "pt-BR")),
     [],
   );
 
@@ -547,11 +552,11 @@ export default function Home() {
       <header className="site-header">
         <a className="brand" href="#inicio" aria-label="Central Juliana 1020"><img src="/media/juliana-logo.png" alt="Juliana 1020" /></a>
         <nav className={menuOpen ? "open" : ""} aria-label="Navegação principal">
-          <a href="#materiais" onClick={() => setMenuOpen(false)}>Materiais</a>
+          <a href="#historia" onClick={() => setMenuOpen(false)}>História</a>
+          <a href="#mandato" onClick={() => setMenuOpen(false)}>O que já fez</a>
           <a href="#propostas" onClick={() => setMenuOpen(false)}>Propostas</a>
-          <a href="#historia" onClick={() => setMenuOpen(false)}>Quem é Juliana</a>
+          <a href="#materiais" onClick={() => setMenuOpen(false)}>Materiais</a>
           <a href="#avatar" onClick={() => setMenuOpen(false)}>Minha foto</a>
-          <a href="https://whatsapp.com/channel/0029Vb8J3XW8F2p68rcnif34" target="_blank" rel="noreferrer">Figurinhas</a>
         </nav>
         <a className="header-cta" href="#materiais"><Download size={17} /> Baixar materiais</a>
         <button className="menu-button" type="button" onClick={() => setMenuOpen((value) => !value)} aria-label="Abrir menu" aria-expanded={menuOpen}>{menuOpen ? <X /> : <Menu />}</button>
@@ -574,7 +579,7 @@ export default function Home() {
         </div>
         <div className="hero-visual" aria-label="Fotos oficiais de Juliana">
           <span className="hero-number">1020</span>
-          <div className="hero-photo main-photo"><img src="/media/juliana-34.jpg" alt="Juliana, candidata a deputada federal" /></div>
+          <div className="hero-photo main-photo"><img src="/media/juliana-39.jpg" alt="Juliana sorrindo, candidata a deputada federal" /></div>
           <div className="hero-photo mini-photo photo-a"><img src="/media/juliana-17.jpg" alt="Juliana em foto oficial" /></div>
           <div className="hero-photo mini-photo photo-b"><img src="/media/juliana-45.jpg" alt="Juliana em foto oficial" /></div>
           <div className="floating-label label-top"><Sparkles size={15} /> Deputada do Araguaia</div>
@@ -603,11 +608,60 @@ export default function Home() {
 
       <section className="story-section" id="historia">
         <div className="story-intro">
-          <div className="story-photo-stack"><div className="story-photo story-photo-main"><img src="/media/juliana-27.jpg" alt="Retrato de Juliana" /></div><div className="story-photo story-photo-small"><img src="/media/juliana-39.jpg" alt="Juliana em foto oficial" /></div><div className="story-stamp"><span>16.385</span><small>votos em sua<br />primeira eleição</small></div></div>
-          <div className="story-copy"><span className="eyebrow dark"><span /> Quem é Juliana</span><h2>Uma história de família, trabalho e coragem para agir.</h2><p className="story-lead">Juliana Kolankiewicz é médica-veterinária, mãe de três filhos e candidata a deputada federal pelo Republicanos. Sua vida pública nasceu do trabalho social em Água Boa e ganhou o Vale do Araguaia.</p><blockquote>“O Araguaia merece uma voz presente todos os dias em Brasília.”</blockquote><div className="story-tags"><span><HeartHandshake size={16} /> Família</span><span><UsersRound size={16} /> Trabalho social</span><span><Building2 size={16} /> Experiência</span></div></div>
+          <div className="story-photo-stack"><div className="story-photo story-photo-main family-photo"><img src="/media/historia/familia-juliana.jpg" alt="Juliana com familiares em Água Boa" /></div><div className="story-photo story-photo-small"><img src="/media/juliana-31.jpg" alt="Juliana sorrindo" /></div><div className="story-stamp"><span>16.385</span><small>votos em sua<br />primeira eleição</small></div></div>
+          <div className="story-copy"><span className="eyebrow dark"><span /> História e família</span><h2>Antes do mandato, vieram as raízes. Antes do discurso, veio o cuidado.</h2><p className="story-lead">Juliana Kolankiewicz é médica-veterinária, mãe de Nelson, José Pedro e Helena e candidata a deputada federal pelo Republicanos. Nascida em Palmas, no Paraná, filha de Ivete e Nelson Souza, cresceu em uma família de quatro mulheres e aprendeu cedo que coragem se demonstra fazendo.</p><p className="story-lead story-lead-second">Em 2007, ela e o marido, o médico Mariano Kolankiewicz Filho, escolheram Água Boa para viver. Mariano é o atual prefeito, reeleito para o segundo mandato, e foi ao lado da comunidade que Juliana transformou vocação social em trabalho público.</p><blockquote>“O que já mudou vidas em Água Boa pode alcançar todo Mato Grosso.”</blockquote><div className="story-tags"><span><HeartHandshake size={16} /> Família</span><span><UsersRound size={16} /> Assistência social</span><span><Building2 size={16} /> Gestão que entrega</span></div></div>
         </div>
         <div className="biography-timeline">{biographySteps.map((step, index) => <article key={step.year}><span className="timeline-index">{String(index + 1).padStart(2, "0")}</span><small>{step.year}</small><h3>{step.title}</h3><p>{step.text}</p></article>)}</div>
-        <div className="story-manifesto"><div><span className="eyebrow light"><span /> Presença em Brasília</span><h3>Quatro meses mostraram o que é possível. Agora, o trabalho é por quatro anos.</h3></div><div className="manifesto-points"><span><strong>2024</strong> assumiu na Câmara</span><span><strong>PL 909</strong> defesa do Araguaia</span><span><strong>Pronaf</strong> relatoria aprovada</span><span><strong>Agora</strong> candidata federal</span></div></div>
+        <div className="story-manifesto"><div><span className="eyebrow light"><span /> Uma trajetória que ganhou escala</span><h3>Da assistência social de Água Boa ao plenário da Câmara: a mesma forma de trabalhar, perto de quem precisa.</h3></div><div className="manifesto-points"><span><strong>2007</strong> Água Boa virou casa</span><span><strong>2022</strong> 16.385 votos</span><span><strong>2024</strong> mandato federal</span><span><strong>Agora</strong> candidata federal</span></div></div>
+      </section>
+
+      <section className="federal-impact" id="mandato">
+        <div className="federal-heading">
+          <div><span className="eyebrow light"><span /> Quatro meses na Câmara</span><h2>Pouco tempo.<br /><em>Decisões gigantes.</em></h2></div>
+          <p>Juliana mostrou que representação não é ocupar uma cadeira. É conhecer a região, estudar o impacto e agir quando o futuro do Araguaia e de quem produz está em jogo.</p>
+        </div>
+
+        <article className="federal-story corridor-story">
+          <div className="impact-media"><img src="/media/historia/juliana-plenario-collage.jpg" alt="Juliana durante atuação no plenário da Câmara dos Deputados" /><span className="impact-photo-label"><Leaf size={17} /> Defesa do Vale do Araguaia</span></div>
+          <div className="impact-copy">
+            <span className="impact-kicker">PL 909/2024 • Corredor ecológico</span>
+            <h3>Quando o Araguaia correu risco de parar, Juliana colocou a região no centro da decisão.</h3>
+            <p>O texto original previa uma faixa contínua de <strong>20 km em cada margem</strong> dos rios Araguaia e Tocantins, atravessando áreas produtivas, zonas urbanas e de expansão em cinco estados. No parecer, a área potencial foi estimada em quase <strong>11 milhões de hectares</strong>.</p>
+            <p>Juliana conseguiu levar a análise também à Comissão de Agricultura, pediu audiência pública, assumiu a relatoria e apresentou parecer pela rejeição. Em dezembro de 2024, o parecer foi aprovado na comissão por <strong>28 votos a 7</strong>.</p>
+            <div className="impact-stats"><span><strong>40 km</strong> faixa total prevista</span><span><strong>5 estados</strong> alcançados pelo texto</span><span><strong>28 × 7</strong> aprovação do parecer</span></div>
+            <div className="impact-alert"><ShieldCheck size={18} /><span><strong>O impacto que ela evidenciou:</strong> risco de restrições de uso, insegurança jurídica, entraves ao crescimento urbano e pressão sobre atividades produtivas sem os estudos prévios exigidos para uma unidade de conservação.</span></div>
+            <div className="source-row"><span>A aprovação na Agricultura foi uma vitória importante; a tramitação do projeto continuou em outra comissão.</span><a href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2422648" target="_blank" rel="noreferrer">Ver tramitação oficial <ArrowRight size={14} /></a></div>
+          </div>
+        </article>
+
+        <article className="federal-story pronaf-story">
+          <div className="impact-copy">
+            <span className="impact-kicker green-kicker">Lei 15.034/2024 • Pronaf</span>
+            <h3>Ela transformou garantia pública em oportunidade para quem produz.</h3>
+            <p>Como relatora do texto, Juliana ajudou a autorizar até <strong>R$ 500 milhões</strong> de aporte no Fundo Garantidor de Operações, destinados exclusivamente a operações do Pronaf.</p>
+            <p>Na prática, a garantia reduz o risco para os bancos e facilita o financiamento de agricultores familiares que muitas vezes não conseguem apresentar bens como garantia. A lei permite cobertura de até <strong>100% por operação</strong>, dentro das regras do programa.</p>
+            <div className="pronaf-big-number"><span>R$ 500 mi</span><strong>em garantias com potencial informado de alavancar até R$ 1,5 bilhão em crédito.</strong></div>
+            <ul className="impact-list"><li><Check />Mais portas abertas para o pequeno produtor</li><li><Check />Crédito para produzir, investir e gerar renda</li><li><Check />Texto transformado em lei federal</li></ul>
+            <div className="source-row"><span>O valor de R$ 1,5 bilhão é apresentado como potencial de alavancagem, não como total já liberado.</span><a href="https://www.camara.leg.br/noticias/1091732-CAMARA-APROVA-MAIS-RECURSOS-PARA-GARANTIR-CREDITO-A-AGRICULTURA-FAMILIAR" target="_blank" rel="noreferrer">Ver fonte oficial <ArrowRight size={14} /></a></div>
+          </div>
+          <div className="pronaf-media"><div className="pronaf-photo juliana-photo"><img src="/media/historia/juliana-plenario.jpg" alt="Juliana discursando no plenário" /></div><div className="pronaf-photo farmer-photo"><img src="/media/historia/agricultor-pronaf.jpg" alt="Agricultor familiar em sua produção" /></div><span className="pronaf-seal"><Tractor size={22} /> Crédito que chega à roça</span></div>
+        </article>
+      </section>
+
+      <section className="legacy-section" id="aguaboa">
+        <div className="section-heading legacy-heading"><div><span className="eyebrow dark"><span /> Trabalho que já dá resultado</span><h2>Água Boa mostra o caminho.<br />Mato Grosso pode ir além.</h2></div><p>Como primeira-dama e secretária de Assistência Social, Juliana ajudou a construir políticas que cuidam da família inteira — da infância à melhor idade. O compromisso agora é ampliar esse alcance para todo o estado.</p></div>
+
+        <div className="legacy-grid">
+          <article className="legacy-card housing-card"><div className="legacy-image"><img src="/media/historia/entrega-casas.jpg" alt="Entrega de casas gratuitas para famílias de Água Boa" /><span><HomeIcon size={18} /> Habitação</span></div><div className="legacy-copy"><small>Casa própria sem dívida</small><h3>60 famílias já receberam. Outras 50 casas estão em construção.</h3><p>São <strong>110 moradias</strong> no total, destinadas a famílias de baixa renda. As primeiras 60 foram entregues gratuitamente; a nova etapa amplia um projeto que devolve segurança, endereço e futuro.</p><div className="mini-gallery"><img src="/media/historia/casas-agua-boa.jpg" alt="Conjunto de casas em Água Boa" /><img src="/media/historia/ser-familia.jpg" alt="Equipe do programa Ser Família em Água Boa" /></div><a href="https://www.aguaboa.mt.gov.br/noticias/11-assistencia-social/7071-prefeitura-de-agua-boa-entrega-mais-10-casas-pelo-programa-ser-familia-habitacao" target="_blank" rel="noreferrer">Ver dados oficiais <ArrowRight size={14} /></a></div></article>
+
+          <article className="legacy-card seniors-card"><div className="legacy-collage"><img src="/media/historia/ilpi-render.jpg" alt="Projeto da Instituição de Longa Permanência para Idosos" /><img src="/media/historia/hidroginastica.jpg" alt="Atividade de hidroginástica" /><img src="/media/historia/escola-coluna.jpg" alt="Atividade da Escola da Coluna" /></div><div className="legacy-copy"><small>Cuidado com a pessoa idosa</small><h3>Convivência hoje. Acolhimento permanente em construção.</h3><p>Cerca de <strong>300 idosos</strong> participam do grupo da Melhor Idade, com pilates, hidroginástica, culinária, passeios e viagens. A ILPI regional está em obras para oferecer acolhimento digno a quem precisa de acompanhamento permanente e não tem retaguarda familiar.</p><a href="https://aguaboa.mt.gov.br/noticias/192-planejamento-obras-e-engenharia/6872-obra-da-ilpi-avanca-e-sera-marco-no-cuidado-com-idosos-em-agua-boa" target="_blank" rel="noreferrer">Conhecer a ILPI <ArrowRight size={14} /></a></div></article>
+
+          <article className="legacy-card inclusion-card"><div className="legacy-image"><img src="/media/historia/sala-multissensorial.jpg" alt="Sala multissensorial para crianças neurodivergentes" /><span><Sparkles size={18} /> Inclusão</span></div><div className="legacy-copy"><small>Aprender do seu jeito</small><h3>Ambientes multissensoriais para acolher crianças neurodivergentes.</h3><p>Estruturas especializadas ajudam no desenvolvimento, na aprendizagem e no atendimento integrado, respeitando o ritmo e as necessidades de cada criança.</p><a href="https://www.aguaboa.mt.gov.br/saude/3868-prefeitura-inaugura-centro-de-atendimento-do-espectro-autista-em-agua-boa" target="_blank" rel="noreferrer">Ver iniciativa <ArrowRight size={14} /></a></div></article>
+
+          <article className="legacy-card culture-card"><div className="culture-gallery"><img src="/media/historia/voz-agua-boa.jpg" alt="Premiação do festival A Voz de Água Boa" /><img src="/media/historia/festrilha.jpg" alt="Apresentação da Festrilha" /><img src="/media/historia/natal-agua-boa.jpg" alt="Espetáculo de Natal em Água Boa" /><img src="/media/historia/pascoa-agua-boa.jpg" alt="Decoração de Páscoa em Água Boa" /></div><div className="legacy-copy"><small>Cultura que aproxima</small><h3>Da Páscoa ao Natal, da Festrilha ao festival A Voz de Água Boa.</h3><p>Eventos gratuitos ocupam a cidade, valorizam artistas locais, movimentam famílias e transformam cultura em pertencimento. O festival A Voz de Água Boa revela e premia talentos musicais em diferentes categorias.</p><a href="https://www.aguaboa.mt.gov.br/noticias/6927-festival-a-voz-de-agua-boa-2026-emociona-publico-e-revela-grandes-talentos-em-tres-noites-inesqueciveis" target="_blank" rel="noreferrer">Conhecer o festival <ArrowRight size={14} /></a></div></article>
+        </div>
+
+        <div className="statewide-callout"><img src="/media/historia/agua-boa.jpg" alt="Vista aérea de Água Boa" /><div><span className="eyebrow light"><span /> Próximo passo</span><h3>Não é só contar o que foi feito. É mostrar o que pode ser multiplicado.</h3><p>Habitação gratuita, cuidado com idosos, inclusão, cultura e proteção à produção: experiências locais que podem inspirar políticas públicas para municípios de todo Mato Grosso.</p><a className="button button-yellow" href="#propostas">Ver propostas para o estado <ArrowRight size={17} /></a></div></div>
       </section>
 
       <section className="proposals-section" id="propostas">
@@ -623,6 +677,7 @@ export default function Home() {
 
       <section className="library-section" id="materiais" ref={archiveRef}>
         <div className="library-heading"><div><span className="eyebrow dark"><span /> Acervo completo</span><h2>Nada escondido.<br />Tudo em um só lugar.</h2><p>{archiveCounts.total} arquivos mapeados nas pastas oficiais, incluindo {archiveCounts.videos} vídeos, {archiveCounts.photos} fotos e {archiveCounts.audios} músicas.</p></div><form className="library-search" onSubmit={submitSearch}><Search size={20} /><input value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="Buscar no acervo..." aria-label="Buscar no acervo" />{query ? <button type="button" onClick={() => { setQuery(""); setVisibleCount(18); }} aria-label="Limpar busca"><X size={17} /></button> : null}</form></div>
+        <div className="video-theme-board"><div><span><Video size={18} /> Videoteca por assunto</span><strong>Escolha um tema e assista à sequência completa.</strong></div><div>{videoThemes.map((theme) => <button type="button" key={theme} className={typeFilter === "Vídeos" && themeFilter === theme ? "active" : ""} onClick={() => { setTypeFilter("Vídeos"); setThemeFilter(theme); setVisibleCount(18); }}><span>{theme}</span><small>{materials.filter((material) => material.kind === "Vídeos" && material.theme === theme).length} vídeos</small></button>)}</div></div>
         <div className="filter-scroll" aria-label="Filtrar por formato">{typeFilters.map((type) => <button type="button" key={type} className={typeFilter === type ? "active" : ""} onClick={() => { setTypeFilter(type); setVisibleCount(18); }}>{type}</button>)}</div>
         <div className="theme-scroll" aria-label="Filtrar por tema">{themes.map((theme) => <button type="button" key={theme} className={themeFilter === theme ? "active" : ""} onClick={() => { setThemeFilter(theme); setVisibleCount(18); }}>{theme}</button>)}</div>
         <div className="result-line"><strong>{filteredMaterials.length}</strong> itens ou coleções encontrados<span />Mostrando {Math.min(visibleCount, filteredMaterials.length)} agora</div>
@@ -633,7 +688,7 @@ export default function Home() {
 
       <section className="stickers-section"><div className="sticker-bubbles"><span>1020</span><span>💙</span><span>EU TÔ COM ELA</span><span>ARAGUAIA</span></div><div><span className="eyebrow light"><span /> Figurinhas no WhatsApp</span><h2>Coloque a Juliana nas suas conversas.</h2><p>Acesse o canal oficial, salve as figurinhas e compartilhe com seus contatos.</p></div><a className="button button-yellow" href="https://whatsapp.com/channel/0029Vb8J3XW8F2p68rcnif34" target="_blank" rel="noreferrer"><MessageCircle size={19} /> Abrir canal de figurinhas</a></section>
 
-      <footer><a className="footer-brand" href="#inicio"><img src="/media/juliana-logo.png" alt="Juliana 1020" /></a><p>Central oficial de materiais da campanha Juliana 1020 • Republicanos</p><div><a href="#materiais">Materiais</a><a href="#propostas">Propostas</a><a href="#historia">Quem é Juliana</a><a href="#avatar">Minha foto</a></div></footer>
+      <footer><a className="footer-brand" href="#inicio"><img src="/media/juliana-logo.png" alt="Juliana 1020" /></a><p>Central oficial de materiais da campanha Juliana 1020 • Republicanos</p><div><a href="#historia">História</a><a href="#mandato">O que já fez</a><a href="#propostas">Propostas</a><a href="#materiais">Materiais</a><a href="#avatar">Minha foto</a></div></footer>
 
       {modalMaterial ? <MaterialModal material={modalMaterial} onClose={() => setModalMaterial(null)} /> : null}
       {toast ? <div className="toast" role="status"><Check /> {toast}</div> : null}
