@@ -8,7 +8,9 @@ import {
   Building2,
   Camera,
   Check,
+  ChevronLeft,
   ChevronDown,
+  ChevronRight,
   CircleUserRound,
   Download,
   FileText,
@@ -73,6 +75,29 @@ const featuredIds = [
   "foto-1m0PThl54L8N7J2iALMjEXB_QW9_HnKW_",
   "audio-1gsgmMbwnY1zwpzokl8j3sXeXN-v-U3yQ",
 ];
+
+const familyPhotos = [
+  {
+    src: "/media/historia/familia-lago.jpg",
+    alt: "Juliana, Mariano e os três filhos durante um dia em família às margens do lago",
+    label: "Um dia em família às margens do lago",
+  },
+  {
+    src: "/media/historia/familia-natal.jpg",
+    alt: "Juliana com Mariano, os filhos e Dona Ivete durante o Natal",
+    label: "Natal em família, com Dona Ivete",
+  },
+  {
+    src: "/media/historia/familia-arraia.jpg",
+    alt: "Juliana, Mariano e os filhos reunidos em uma festa junina",
+    label: "Tradições que aproximam a família",
+  },
+  {
+    src: "/media/historia/familia-dia-das-maes.jpg",
+    alt: "Juliana, Mariano e os filhos juntos no Dia das Mães",
+    label: "Amor e união no Dia das Mães",
+  },
+] as const;
 
 const proposals: Array<{
   id: string;
@@ -388,6 +413,7 @@ export default function Home() {
   const [zoom, setZoom] = useState(1);
   const [panX, setPanX] = useState(0);
   const [panY, setPanY] = useState(0);
+  const [activeFamilyPhoto, setActiveFamilyPhoto] = useState(0);
   const archiveRef = useRef<HTMLElement>(null);
 
   const featured = useMemo(
@@ -546,6 +572,7 @@ export default function Home() {
 
   const selectedProposal = proposals.find((proposal) => proposal.id === activeProposal) ?? proposals[0];
   const ProposalIcon = selectedProposal.icon;
+  const selectedFamilyPhoto = familyPhotos[activeFamilyPhoto];
 
   return (
     <main>
@@ -608,7 +635,18 @@ export default function Home() {
 
       <section className="story-section" id="historia">
         <div className="story-intro">
-          <div className="story-photo-stack"><figure className="story-photo story-photo-main family-photo"><img src="/media/historia/familia-juliana.jpg" alt="Juliana em um momento com sua família em Água Boa" /><figcaption>Família: a base de toda a sua caminhada</figcaption></figure><div className="story-photo story-photo-small"><img src="/media/juliana-31.jpg" alt="Juliana sorrindo" /></div><div className="story-stamp"><span>16.385</span><small>votos em sua<br />primeira eleição</small></div></div>
+          <div className="family-carousel" aria-roledescription="carrossel" aria-label="Momentos da família de Juliana">
+            <figure className="family-slide" key={selectedFamilyPhoto.src}>
+              <img src={selectedFamilyPhoto.src} alt={selectedFamilyPhoto.alt} />
+              <figcaption><span>{selectedFamilyPhoto.label}</span><small>{String(activeFamilyPhoto + 1).padStart(2, "0")} / {String(familyPhotos.length).padStart(2, "0")}</small></figcaption>
+              <button className="family-arrow family-arrow-left" type="button" aria-label="Foto anterior da família" onClick={() => setActiveFamilyPhoto((activeFamilyPhoto - 1 + familyPhotos.length) % familyPhotos.length)}><ChevronLeft /></button>
+              <button className="family-arrow family-arrow-right" type="button" aria-label="Próxima foto da família" onClick={() => setActiveFamilyPhoto((activeFamilyPhoto + 1) % familyPhotos.length)}><ChevronRight /></button>
+            </figure>
+            <div className="family-thumbnails" aria-label="Escolher foto da família">
+              {familyPhotos.map((photo, index) => <button type="button" key={photo.src} className={index === activeFamilyPhoto ? "active" : ""} aria-label={`Mostrar: ${photo.label}`} aria-pressed={index === activeFamilyPhoto} onClick={() => setActiveFamilyPhoto(index)}><img src={photo.src} alt="" /><span>{photo.label}</span></button>)}
+            </div>
+            <div className="story-stamp"><span>16.385</span><small>votos em sua<br />primeira eleição</small></div>
+          </div>
           <div className="story-copy"><span className="eyebrow dark"><span /> História e família</span><h2>Antes do mandato, vieram as raízes. Antes do discurso, veio o cuidado.</h2><p className="story-lead">Juliana Kolankiewicz é médica-veterinária, mãe de Nelson, José Pedro e Helena e candidata a deputada federal pelo Republicanos. Nascida em Palmas, no Paraná, filha de Ivete e Nelson Souza, cresceu em uma família de quatro mulheres e aprendeu cedo que coragem se demonstra fazendo.</p><p className="story-lead story-lead-second">Em 2007, ela e o marido, o médico Mariano Kolankiewicz Filho, escolheram Água Boa para viver. Mariano é o atual prefeito, reeleito para o segundo mandato, e foi ao lado da comunidade que Juliana transformou vocação social em trabalho público.</p><blockquote>“O que já mudou vidas em Água Boa pode alcançar todo Mato Grosso.”</blockquote><div className="story-tags"><span><HeartHandshake size={16} /> Família</span><span><UsersRound size={16} /> Assistência social</span><span><Building2 size={16} /> Gestão que entrega</span></div></div>
         </div>
         <div className="biography-timeline">{biographySteps.map((step, index) => <article key={step.year}><span className="timeline-index">{String(index + 1).padStart(2, "0")}</span><small>{step.year}</small><h3>{step.title}</h3><p>{step.text}</p></article>)}</div>
@@ -677,7 +715,7 @@ export default function Home() {
       </section>
 
       <section className="library-section" id="materiais" ref={archiveRef}>
-        <div className="library-heading"><div><span className="eyebrow dark"><span /> Acervo completo</span><h2>Nada escondido.<br />Tudo em um só lugar.</h2><p>{archiveCounts.total} arquivos mapeados nas pastas oficiais, incluindo {archiveCounts.videos} vídeos, {archiveCounts.photos} fotos e {archiveCounts.audios} músicas.</p></div><form className="library-search" onSubmit={submitSearch}><Search size={20} /><input value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="Buscar no acervo..." aria-label="Buscar no acervo" />{query ? <button type="button" onClick={() => { setQuery(""); setVisibleCount(18); }} aria-label="Limpar busca"><X size={17} /></button> : null}</form></div>
+        <div className="library-heading"><div><span className="eyebrow dark"><span /> Acervo completo</span><h2>Materiais para Baixar</h2><p>{archiveCounts.total} arquivos mapeados nas pastas oficiais, incluindo {archiveCounts.videos} vídeos, {archiveCounts.photos} fotos e {archiveCounts.audios} músicas.</p></div><form className="library-search" onSubmit={submitSearch}><Search size={20} /><input value={query} onChange={(event) => { setQuery(event.target.value); setVisibleCount(18); }} placeholder="Buscar no acervo..." aria-label="Buscar no acervo" />{query ? <button type="button" onClick={() => { setQuery(""); setVisibleCount(18); }} aria-label="Limpar busca"><X size={17} /></button> : null}</form></div>
         <div className="video-theme-board"><div><span><Video size={18} /> Videoteca por assunto</span><strong>Escolha um tema e assista à sequência completa.</strong></div><div>{videoThemes.map((theme) => <button type="button" key={theme} className={typeFilter === "Vídeos" && themeFilter === theme ? "active" : ""} onClick={() => { setTypeFilter("Vídeos"); setThemeFilter(theme); setVisibleCount(18); }}><span>{theme}</span><small>{materials.filter((material) => material.kind === "Vídeos" && material.theme === theme).length} vídeos</small></button>)}</div></div>
         <div className="filter-scroll" aria-label="Filtrar por formato">{typeFilters.map((type) => <button type="button" key={type} className={typeFilter === type ? "active" : ""} onClick={() => { setTypeFilter(type); setVisibleCount(18); }}>{type}</button>)}</div>
         <div className="theme-scroll" aria-label="Filtrar por tema">{themes.map((theme) => <button type="button" key={theme} className={themeFilter === theme ? "active" : ""} onClick={() => { setThemeFilter(theme); setVisibleCount(18); }}>{theme}</button>)}</div>

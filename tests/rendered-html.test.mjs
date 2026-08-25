@@ -32,6 +32,8 @@ test("server-renders the Juliana content hub", async () => {
   assert.match(html, /<title>Central Juliana 1020 \| Materiais oficiais<\/title>/i);
   assert.match(html, /id="historia"/);
   assert.match(html, /História e família/);
+  assert.match(html, /Momentos da família de Juliana/);
+  assert.match(html, /familia-lago\.jpg/);
   assert.match(html, /16\.385/);
   assert.match(html, /id="mandato"/);
   assert.match(html, /28 votos a 7/);
@@ -40,6 +42,8 @@ test("server-renders the Juliana content hub", async () => {
   assert.match(html, /Desenvolvimento com segurança jurídica/);
   assert.match(html, /id="avatar"/);
   assert.match(html, /id="materiais"/);
+  assert.match(html, /Materiais para Baixar/);
+  assert.doesNotMatch(html, /Nada escondido/);
   assert.match(html, /164/);
   assert.match(html, /27/);
   assert.match(html, /whatsapp\.com\/channel\/0029Vb8J3XW8F2p68rcnif34/);
