@@ -177,10 +177,10 @@ const proposals: Array<{
     kicker: "Pronaf",
     summary:
       "Relatoria que ajudou a ampliar as garantias para quem produz alimento e movimenta a economia no campo.",
-    stat: "R$ 500 mi",
-    statLabel: "em garantias adicionais de crédito",
+    stat: "R$ 1,5 bi",
+    statLabel: "liberado em crédito Pronaf",
     points: [
-      "Aporte adicional no Fundo Garantidor de Operações.",
+      "R$ 500 milhões destinados ao Fundo Garantidor de Operações.",
       "Mais acesso ao financiamento para agricultores familiares.",
       "Texto aprovado e transformado na Lei nº 15.034/2024.",
     ],
@@ -608,7 +608,7 @@ export default function Home() {
 
       <section className="story-section" id="historia">
         <div className="story-intro">
-          <div className="story-photo-stack"><div className="story-photo story-photo-main family-photo"><img src="/media/historia/familia-juliana.jpg" alt="Juliana com familiares em Água Boa" /></div><div className="story-photo story-photo-small"><img src="/media/juliana-31.jpg" alt="Juliana sorrindo" /></div><div className="story-stamp"><span>16.385</span><small>votos em sua<br />primeira eleição</small></div></div>
+          <div className="story-photo-stack"><figure className="story-photo story-photo-main family-photo"><img src="/media/historia/familia-juliana.jpg" alt="Juliana em um momento com sua família em Água Boa" /><figcaption>Família: a base de toda a sua caminhada</figcaption></figure><div className="story-photo story-photo-small"><img src="/media/juliana-31.jpg" alt="Juliana sorrindo" /></div><div className="story-stamp"><span>16.385</span><small>votos em sua<br />primeira eleição</small></div></div>
           <div className="story-copy"><span className="eyebrow dark"><span /> História e família</span><h2>Antes do mandato, vieram as raízes. Antes do discurso, veio o cuidado.</h2><p className="story-lead">Juliana Kolankiewicz é médica-veterinária, mãe de Nelson, José Pedro e Helena e candidata a deputada federal pelo Republicanos. Nascida em Palmas, no Paraná, filha de Ivete e Nelson Souza, cresceu em uma família de quatro mulheres e aprendeu cedo que coragem se demonstra fazendo.</p><p className="story-lead story-lead-second">Em 2007, ela e o marido, o médico Mariano Kolankiewicz Filho, escolheram Água Boa para viver. Mariano é o atual prefeito, reeleito para o segundo mandato, e foi ao lado da comunidade que Juliana transformou vocação social em trabalho público.</p><blockquote>“O que já mudou vidas em Água Boa pode alcançar todo Mato Grosso.”</blockquote><div className="story-tags"><span><HeartHandshake size={16} /> Família</span><span><UsersRound size={16} /> Assistência social</span><span><Building2 size={16} /> Gestão que entrega</span></div></div>
         </div>
         <div className="biography-timeline">{biographySteps.map((step, index) => <article key={step.year}><span className="timeline-index">{String(index + 1).padStart(2, "0")}</span><small>{step.year}</small><h3>{step.title}</h3><p>{step.text}</p></article>)}</div>
@@ -637,12 +637,13 @@ export default function Home() {
         <article className="federal-story pronaf-story">
           <div className="impact-copy">
             <span className="impact-kicker green-kicker">Lei 15.034/2024 • Pronaf</span>
-            <h3>Ela transformou garantia pública em oportunidade para quem produz.</h3>
-            <p>Como relatora do texto, Juliana ajudou a autorizar até <strong>R$ 500 milhões</strong> de aporte no Fundo Garantidor de Operações, destinados exclusivamente a operações do Pronaf.</p>
-            <p>Na prática, a garantia reduz o risco para os bancos e facilita o financiamento de agricultores familiares que muitas vezes não conseguem apresentar bens como garantia. A lei permite cobertura de até <strong>100% por operação</strong>, dentro das regras do programa.</p>
-            <div className="pronaf-big-number"><span>R$ 500 mi</span><strong>em garantias com potencial informado de alavancar até R$ 1,5 bilhão em crédito.</strong></div>
+            <h3>R$ 1,5 bilhão em crédito Pronaf liberado para quem produz.</h3>
+            <p>Juliana foi relatora do projeto que destinou <strong>R$ 500 milhões ao Fundo Garantidor de Operações</strong>. Foi essa garantia pública que tornou possível liberar <strong>R$ 1,5 bilhão em crédito Pronaf</strong> para pequenos produtores.</p>
+            <p>Os R$ 500 milhões não são o valor do crédito concedido: são a proteção financeira que dá segurança às instituições e abre a porta para agricultores familiares que não dispõem de patrimônio suficiente para oferecer como garantia. A lei permite cobertura de até <strong>100% por operação</strong>, conforme as regras do programa.</p>
+            <div className="pronaf-big-number"><span>R$ 1,5 bi</span><strong>liberado em crédito Pronaf para fortalecer a agricultura familiar.</strong></div>
+            <div className="pronaf-support"><strong>R$ 500 milhões</strong><span>conseguidos por meio da relatoria de Juliana para garantir as operações.</span></div>
             <ul className="impact-list"><li><Check />Mais portas abertas para o pequeno produtor</li><li><Check />Crédito para produzir, investir e gerar renda</li><li><Check />Texto transformado em lei federal</li></ul>
-            <div className="source-row"><span>O valor de R$ 1,5 bilhão é apresentado como potencial de alavancagem, não como total já liberado.</span><a href="https://www.camara.leg.br/noticias/1091732-CAMARA-APROVA-MAIS-RECURSOS-PARA-GARANTIR-CREDITO-A-AGRICULTURA-FAMILIAR" target="_blank" rel="noreferrer">Ver fonte oficial <ArrowRight size={14} /></a></div>
+            <div className="source-row"><span>A Câmara registra a relatoria de Juliana e a destinação de R$ 500 milhões ao fundo garantidor do Pronaf.</span><a href="https://www.camara.leg.br/noticias/1091732-CAMARA-APROVA-MAIS-RECURSOS-PARA-GARANTIR-CREDITO-A-AGRICULTURA-FAMILIAR" target="_blank" rel="noreferrer">Ver atuação oficial <ArrowRight size={14} /></a></div>
           </div>
           <div className="pronaf-media"><div className="pronaf-photo juliana-photo"><img src="/media/historia/juliana-plenario.jpg" alt="Juliana discursando no plenário" /></div><div className="pronaf-photo farmer-photo"><img src="/media/historia/agricultor-pronaf.jpg" alt="Agricultor familiar em sua produção" /></div><span className="pronaf-seal"><Tractor size={22} /> Crédito que chega à roça</span></div>
         </article>
@@ -652,7 +653,7 @@ export default function Home() {
         <div className="section-heading legacy-heading"><div><span className="eyebrow dark"><span /> Trabalho que já dá resultado</span><h2>Água Boa mostra o caminho.<br />Mato Grosso pode ir além.</h2></div><p>Como primeira-dama e secretária de Assistência Social, Juliana ajudou a construir políticas que cuidam da família inteira — da infância à melhor idade. O compromisso agora é ampliar esse alcance para todo o estado.</p></div>
 
         <div className="legacy-grid">
-          <article className="legacy-card housing-card"><div className="legacy-image"><img src="/media/historia/entrega-casas.jpg" alt="Entrega de casas gratuitas para famílias de Água Boa" /><span><HomeIcon size={18} /> Habitação</span></div><div className="legacy-copy"><small>Casa própria sem dívida</small><h3>60 famílias já receberam. Outras 50 casas estão em construção.</h3><p>São <strong>110 moradias</strong> no total, destinadas a famílias de baixa renda. As primeiras 60 foram entregues gratuitamente; a nova etapa amplia um projeto que devolve segurança, endereço e futuro.</p><div className="mini-gallery"><img src="/media/historia/casas-agua-boa.jpg" alt="Conjunto de casas em Água Boa" /><img src="/media/historia/ser-familia.jpg" alt="Equipe do programa Ser Família em Água Boa" /></div><a href="https://www.aguaboa.mt.gov.br/noticias/11-assistencia-social/7071-prefeitura-de-agua-boa-entrega-mais-10-casas-pelo-programa-ser-familia-habitacao" target="_blank" rel="noreferrer">Ver dados oficiais <ArrowRight size={14} /></a></div></article>
+          <article className="legacy-card housing-card"><div className="legacy-image"><img src="/media/historia/casas-agua-boa.jpg" alt="Conjunto de moradias construídas para famílias de Água Boa" /><span><HomeIcon size={18} /> Habitação</span></div><div className="legacy-copy"><small>Casa própria sem dívida</small><h3>60 famílias já receberam. Outras 50 casas estão em construção.</h3><p>São <strong>110 moradias</strong> no total, destinadas a famílias de baixa renda. As primeiras 60 foram entregues gratuitamente; a nova etapa amplia um projeto que devolve segurança, endereço e futuro.</p><div className="mini-gallery"><img src="/media/historia/ser-familia.jpg" alt="Famílias e equipe do programa Ser Família em Água Boa" /><img src="/media/historia/agua-boa.jpg" alt="Vista aérea de Água Boa" /></div><a href="https://www.aguaboa.mt.gov.br/noticias/11-assistencia-social/7071-prefeitura-de-agua-boa-entrega-mais-10-casas-pelo-programa-ser-familia-habitacao" target="_blank" rel="noreferrer">Ver dados oficiais <ArrowRight size={14} /></a></div></article>
 
           <article className="legacy-card seniors-card"><div className="legacy-collage"><img src="/media/historia/ilpi-render.jpg" alt="Projeto da Instituição de Longa Permanência para Idosos" /><img src="/media/historia/hidroginastica.jpg" alt="Atividade de hidroginástica" /><img src="/media/historia/escola-coluna.jpg" alt="Atividade da Escola da Coluna" /></div><div className="legacy-copy"><small>Cuidado com a pessoa idosa</small><h3>Convivência hoje. Acolhimento permanente em construção.</h3><p>Cerca de <strong>300 idosos</strong> participam do grupo da Melhor Idade, com pilates, hidroginástica, culinária, passeios e viagens. A ILPI regional está em obras para oferecer acolhimento digno a quem precisa de acompanhamento permanente e não tem retaguarda familiar.</p><a href="https://aguaboa.mt.gov.br/noticias/192-planejamento-obras-e-engenharia/6872-obra-da-ilpi-avanca-e-sera-marco-no-cuidado-com-idosos-em-agua-boa" target="_blank" rel="noreferrer">Conhecer a ILPI <ArrowRight size={14} /></a></div></article>
 

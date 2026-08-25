@@ -190,6 +190,7 @@ main { overflow: hidden; }
 .story-photo-main img { object-position: center 14%; }
 .story-photo-main.family-photo { width: 88%; height: 500px; border-radius: 34px 160px 34px 34px; }
 .story-photo-main.family-photo img { object-position: center center; }
+.story-photo-main.family-photo figcaption { position: absolute; left: 18px; right: 76px; bottom: 18px; padding: 11px 14px; color: #fff; background: rgba(7,31,73,.82); border: 1px solid rgba(255,255,255,.18); border-radius: 12px; backdrop-filter: blur(10px); font-size: 9px; font-weight: 850; letter-spacing: .03em; text-transform: uppercase; }
 .story-photo-small { right: 0; bottom: 0; width: 43%; height: 290px; border: 9px solid #fff; border-radius: 26px; transform: rotate(4deg); }
 .story-photo-small img { object-position: center 12%; }
 .story-stamp { position: absolute; z-index: 3; left: -22px; bottom: 32px; display: flex; align-items: center; gap: 11px; padding: 15px 19px; color: #10264c; background: var(--yellow); border-radius: 17px; box-shadow: 0 18px 34px rgba(14,46,89,.16); transform: rotate(-3deg); }
@@ -250,6 +251,8 @@ main { overflow: hidden; }
 .pronaf-big-number { display: flex; align-items: center; gap: 17px; margin: 11px 0 14px; padding: 17px; color: #5c6d80; background: white; border: 1px solid #dce9df; border-radius: 16px; }
 .pronaf-big-number span { flex: 0 0 auto; color: var(--green); font-size: 29px; font-weight: 950; letter-spacing: -.06em; }
 .pronaf-big-number strong { font-size: 10px; line-height: 1.45; }
+.pronaf-support { display: flex; align-items: center; gap: 12px; margin: -5px 0 14px; padding: 12px 15px; color: #52677e; background: #e7f5eb; border-radius: 13px; font-size: 9px; line-height: 1.45; }
+.pronaf-support strong { flex: 0 0 auto; color: var(--green); font-size: 14px; letter-spacing: -.03em; }
 .impact-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .impact-list li { display: flex; align-items: center; gap: 8px; color: #53647a; font-size: 10px; font-weight: 700; }
 .impact-list svg { flex: 0 0 17px; padding: 3px; color: white; background: var(--green); border-radius: 50%; }

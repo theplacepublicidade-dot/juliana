@@ -36,6 +36,7 @@ test("server-renders the Juliana content hub", async () => {
   assert.match(html, /id="mandato"/);
   assert.match(html, /28 votos a 7/);
   assert.match(html, /R\$ 500 milhões/);
+  assert.match(html, /R\$ 1,5 bilhão em crédito Pronaf/);
   assert.match(html, /Desenvolvimento com segurança jurídica/);
   assert.match(html, /id="avatar"/);
   assert.match(html, /id="materiais"/);
