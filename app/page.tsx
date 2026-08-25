@@ -99,121 +99,29 @@ const familyPhotos = [
   },
 ] as const;
 
-const proposals: Array<{
-  id: string;
-  title: string;
-  kicker: string;
-  summary: string;
-  stat: string;
-  statLabel: string;
-  points: string[];
-  image: string;
-  icon: LucideIcon;
-  tone: string;
-}> = [
-  {
-    id: "mulheres",
-    title: "Proteção e autonomia para mulheres",
-    kicker: "Casa Lilás",
-    summary:
-      "Acolhimento seguro para mulheres com medida protetiva, unido a qualificação, renda e reconstrução de vida.",
-    stat: "10",
-    statLabel: "kitnets de acolhimento",
-    points: [
-      "Moradia temporária e proteção para vítimas de violência doméstica.",
-      "Acesso integrado aos programas sociais do município.",
-      "Capacitação técnica para autonomia e geração de renda.",
-    ],
-    image: "/media/vila-lilas.webp",
-    icon: ShieldCheck,
-    tone: "violet",
-  },
-  {
-    id: "habitacao",
-    title: "Habitação e casa própria",
-    kicker: "Moradia digna",
-    summary:
-      "Trabalho para ampliar o acesso à casa própria e mudar a realidade de famílias de baixa renda.",
-    stat: "110",
-    statLabel: "moradias entregues ou em construção",
-    points: [
-      "50 unidades entregues em parceria com o Governo do Estado.",
-      "Economia de recursos permitiu entregar outras 10 casas.",
-      "Mais 50 unidades estão em construção.",
-    ],
-    image: "/media/a-cada-tijolo.jpg",
-    icon: HomeIcon,
-    tone: "yellow",
-  },
-  {
-    id: "saude",
-    title: "Saúde forte perto de casa",
-    kicker: "Descentralização",
-    summary:
-      "Fortalecer o Hospital Regional de Água Boa para reduzir viagens e levar serviços complexos ao interior.",
-    stat: "11",
-    statLabel: "municípios atendidos pelo hospital",
-    points: [
-      "Ampliação dos serviços, incluindo hemodiálise.",
-      "Perspectiva de procedimentos de maior complexidade.",
-      "Menos deslocamentos para grandes centros e capitais.",
-    ],
-    image: "/media/juliana-31.jpg",
-    icon: Hospital,
-    tone: "green",
-  },
-  {
-    id: "idosos",
-    title: "Respeito e cuidado com a pessoa idosa",
-    kicker: "Melhor idade",
-    summary:
-      "Convivência, lazer, acolhimento e uma estrutura regional preparada para cuidar de quem construiu nossa história.",
-    stat: "1",
-    statLabel: "ILPI regional em construção",
-    points: [
-      "Encontros, viagens, festas culturais e integração social.",
-      "Ações permanentes para qualidade de vida e pertencimento.",
-      "Instituição de Longa Permanência planejada como referência regional.",
-    ],
-    image: "/media/melhor-idade.webp",
-    icon: HandHeart,
-    tone: "orange",
-  },
-  {
-    id: "araguaia",
-    title: "Desenvolvimento com segurança jurídica",
-    kicker: "Vale do Araguaia",
-    summary:
-      "Atuação firme contra o PL 909/2024 e seus possíveis impactos sobre cidades, produtores e áreas produtivas.",
-    stat: "quase 11 mi ha",
-    statLabel: "estimados na faixa analisada pelo parecer",
-    points: [
-      "Conseguiu incluir a Comissão de Agricultura na análise.",
-      "Pediu audiência pública e assumiu a relatoria da proposta.",
-      "Seu parecer pela rejeição foi aprovado por 28 votos a 7 na comissão.",
-    ],
-    image: "/media/historia/juliana-plenario-collage.jpg",
-    icon: Leaf,
-    tone: "blue",
-  },
-  {
-    id: "pronaf",
-    title: "Crédito para a agricultura familiar",
-    kicker: "Pronaf",
-    summary:
-      "Relatoria que ajudou a ampliar as garantias para quem produz alimento e movimenta a economia no campo.",
-    stat: "R$ 1,5 bi",
-    statLabel: "liberado em crédito Pronaf",
-    points: [
-      "R$ 500 milhões destinados ao Fundo Garantidor de Operações.",
-      "Mais acesso ao financiamento para agricultores familiares.",
-      "Texto aprovado e transformado na Lei nº 15.034/2024.",
-    ],
-    image: "/media/historia/agricultor-pronaf.jpg",
-    icon: Tractor,
-    tone: "lime",
-  },
-];
+const proposalTopics = [
+  { title: "Educação", text: "Levar ambientes inclusivos, salas multissensoriais, formação e novas oportunidades para estudantes e profissionais da educação.", icon: BookOpen },
+  { title: "Saúde", text: "Fortalecer o atendimento regional, a prevenção e o acesso a especialidades, reduzindo longas viagens para quem vive no interior.", icon: Hospital },
+  { title: "Agro", text: "Ampliar crédito, garantias, assistência técnica e segurança jurídica para a agricultura familiar e para quem produz em cada região.", icon: Tractor },
+  { title: "Mulheres", text: "Expandir proteção contra a violência, acolhimento, qualificação profissional, autonomia financeira e geração de renda.", icon: ShieldCheck },
+  { title: "Habitação", text: "Criar parcerias para ampliar a moradia digna e transformar programas habitacionais em segurança real para famílias de baixa renda.", icon: HomeIcon },
+  { title: "Pessoa idosa", text: "Estimular convivência, atividade física, centros de cuidado e acolhimento digno para quem construiu a história de Mato Grosso.", icon: HandHeart },
+  { title: "Inclusão", text: "Fortalecer o atendimento integrado a crianças neurodivergentes e suas famílias, respeitando necessidades e ritmos individuais.", icon: Sparkles },
+  { title: "Cultura e talentos", text: "Valorizar artistas locais, eventos comunitários, esporte, lazer e iniciativas que criem pertencimento e novas oportunidades.", icon: Music2 },
+  { title: "Desenvolvimento regional", text: "Planejar investimentos a partir das vocações locais, protegendo o Araguaia e conciliando produção, cidades e qualidade de vida.", icon: Building2 },
+] as const;
+
+const proposalPhotos = [
+  { src: "/media/historia/propostas-encontro-01.jpg", alt: "Juliana caminhando entre apoiadores durante encontro regional", label: "Uma campanha construída no meio das pessoas" },
+  { src: "/media/historia/propostas-encontro-02.jpg", alt: "Juliana abraçando um apoiador", label: "Proximidade para ouvir cada realidade" },
+  { src: "/media/historia/propostas-encontro-03.jpg", alt: "Juliana reunida com lideranças e apoiadores", label: "Diálogo com lideranças de diferentes regiões" },
+  { src: "/media/historia/propostas-encontro-04.jpg", alt: "Juliana com apoiadores em encontro político", label: "Uma representação que nasce da confiança" },
+  { src: "/media/historia/propostas-encontro-05.jpg", alt: "Juliana ao lado de produtor rural apoiador", label: "O agro e o interior no centro das decisões" },
+  { src: "/media/historia/propostas-encontro-06.jpg", alt: "Apoiadores participando de mobilização da campanha", label: "Mobilização para levar o Araguaia mais longe" },
+  { src: "/media/historia/propostas-encontro-07.jpg", alt: "Mulheres apoiadoras com bandeiras da campanha", label: "A força das mulheres em ação" },
+  { src: "/media/historia/propostas-encontro-08.jpg", alt: "Apoiadores com bandeiras durante mobilização", label: "Cada município tem uma voz e uma necessidade" },
+  { src: "/media/historia/propostas-encontro-09.jpg", alt: "Juliana abraçando uma apoiadora", label: "Política feita com cuidado e presença" },
+] as const;
 
 const biographySteps = [
   {
@@ -405,7 +313,7 @@ export default function Home() {
   const [typeFilter, setTypeFilter] = useState<(typeof typeFilters)[number]>("Todos");
   const [themeFilter, setThemeFilter] = useState("Todos");
   const [visibleCount, setVisibleCount] = useState(18);
-  const [activeProposal, setActiveProposal] = useState(proposals[0].id);
+  const [activeProposalPhoto, setActiveProposalPhoto] = useState(0);
   const [modalMaterial, setModalMaterial] = useState<Material | null>(null);
   const [toast, setToast] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -570,9 +478,8 @@ export default function Home() {
     }, "image/png");
   };
 
-  const selectedProposal = proposals.find((proposal) => proposal.id === activeProposal) ?? proposals[0];
-  const ProposalIcon = selectedProposal.icon;
   const selectedFamilyPhoto = familyPhotos[activeFamilyPhoto];
+  const selectedProposalPhoto = proposalPhotos[activeProposalPhoto];
 
   return (
     <main>
@@ -704,9 +611,28 @@ export default function Home() {
       </section>
 
       <section className="proposals-section" id="propostas">
-        <div className="section-heading proposals-heading"><div><span className="eyebrow dark"><span /> Projetos e bandeiras</span><h2>Propostas para ver,<br />entender e compartilhar.</h2></div><div className="heading-actions"><p>Informação direta, organizada por impacto — sem transformar a página em um texto longo.</p><a className="button button-primary" href="/media/propostas-juliana.pdf" target="_blank" rel="noreferrer"><FileText size={17} /> Baixar propostas em PDF</a></div></div>
-        <div className="proposal-selector">{proposals.map((proposal) => { const Icon = proposal.icon; const active = proposal.id === activeProposal; return <button type="button" key={proposal.id} className={`${proposal.tone} ${active ? "active" : ""}`} onClick={() => setActiveProposal(proposal.id)} aria-expanded={active}><span><Icon /></span><small>{proposal.kicker}</small><strong>{proposal.title}</strong><ChevronDown size={17} /></button>; })}</div>
-        <article className={`proposal-detail detail-${selectedProposal.tone}`}><div className="proposal-image"><img src={selectedProposal.image} alt={`Material sobre ${selectedProposal.title}`} /><span><ProposalIcon /> {selectedProposal.kicker}</span></div><div className="proposal-copy"><span className="proposal-overline">O que muda na prática</span><h3>{selectedProposal.title}</h3><p>{selectedProposal.summary}</p><div className="proposal-stat"><strong>{selectedProposal.stat}</strong><span>{selectedProposal.statLabel}</span></div><ul>{selectedProposal.points.map((point) => <li key={point}><Check />{point}</li>)}</ul></div></article>
+        <div className="section-heading proposals-heading"><div><span className="eyebrow dark"><span /> Propostas para Mato Grosso</span><h2>O que funcionou em Água Boa pode alcançar todo o estado.</h2></div><div className="heading-actions"><p>Experiência comprovada, escuta regional e soluções construídas perto das pessoas.</p><a className="button button-primary" href="/media/propostas-juliana.pdf" target="_blank" rel="noreferrer"><FileText size={17} /> Baixar propostas em PDF</a></div></div>
+        <article className="proposal-vision">
+          <div className="proposal-photo-carousel" aria-roledescription="carrossel" aria-label="Juliana perto das pessoas e das lideranças regionais">
+            <figure className="proposal-photo-stage" key={selectedProposalPhoto.src}>
+              <img src={selectedProposalPhoto.src} alt={selectedProposalPhoto.alt} />
+              <figcaption><span>{selectedProposalPhoto.label}</span><small>{String(activeProposalPhoto + 1).padStart(2, "0")} / {String(proposalPhotos.length).padStart(2, "0")}</small></figcaption>
+              <button className="proposal-photo-arrow proposal-photo-arrow-left" type="button" aria-label="Foto anterior" onClick={() => setActiveProposalPhoto((activeProposalPhoto - 1 + proposalPhotos.length) % proposalPhotos.length)}><ChevronLeft /></button>
+              <button className="proposal-photo-arrow proposal-photo-arrow-right" type="button" aria-label="Próxima foto" onClick={() => setActiveProposalPhoto((activeProposalPhoto + 1) % proposalPhotos.length)}><ChevronRight /></button>
+            </figure>
+            <div className="proposal-photo-thumbs" aria-label="Escolher foto do encontro">
+              {proposalPhotos.map((photo, index) => <button type="button" key={photo.src} className={index === activeProposalPhoto ? "active" : ""} aria-label={`Mostrar: ${photo.label}`} aria-pressed={index === activeProposalPhoto} onClick={() => setActiveProposalPhoto(index)}><img src={photo.src} alt="" /></button>)}
+            </div>
+          </div>
+          <div className="proposal-vision-copy">
+            <span className="proposal-vision-overline"><BadgeCheck size={17} /> Experiência que pode ganhar escala</span>
+            <h3>Replicar o que dá resultado. Adaptar ao que cada região precisa.</h3>
+            <p>As propostas de Juliana partem dos resultados construídos em Água Boa para ampliar políticas públicas de sucesso por Mato Grosso. Não se trata de impor um modelo único: cada ação será planejada ouvindo municípios, comunidades e lideranças, respeitando as particularidades sociais, econômicas, culturais e geográficas de cada região e atendendo suas necessidades pontuais.</p>
+            <div className="proposal-topic-grid">
+              {proposalTopics.map((topic) => { const TopicIcon = topic.icon; return <div key={topic.title}><span><TopicIcon /></span><strong>{topic.title}</strong><p>{topic.text}</p></div>; })}
+            </div>
+          </div>
+        </article>
       </section>
 
       <section className="avatar-section" id="avatar">

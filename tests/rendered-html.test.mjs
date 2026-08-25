@@ -39,7 +39,11 @@ test("server-renders the Juliana content hub", async () => {
   assert.match(html, /28 votos a 7/);
   assert.match(html, /R\$ 500 milhões/);
   assert.match(html, /R\$ 1,5 bilhão em crédito Pronaf/);
-  assert.match(html, /Desenvolvimento com segurança jurídica/);
+  assert.match(html, /O que funcionou em Água Boa pode alcançar todo o estado/);
+  assert.match(html, /Replicar o que dá resultado/);
+  assert.match(html, /particularidades sociais, econômicas, culturais e geográficas/);
+  assert.match(html, /propostas-encontro-01\.jpg/);
+  assert.doesNotMatch(html, /proposal-selector/);
   assert.match(html, /id="avatar"/);
   assert.match(html, /id="materiais"/);
   assert.match(html, /Materiais para Baixar/);
