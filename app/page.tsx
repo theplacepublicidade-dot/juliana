@@ -55,6 +55,8 @@ import {
   type MaterialKind,
 } from "./materials";
 
+const CAMPAIGN_CNPJ = "68.545.092/0001-29";
+
 const typeFilters = [
   "Todos",
   "Vídeos",
@@ -84,8 +86,8 @@ const familyPhotos = [
   },
   {
     src: "/media/historia/familia-natal.jpg",
-    alt: "Juliana com Mariano, os filhos e Dona Ivete durante o Natal",
-    label: "Natal em família, com Dona Ivete",
+    alt: "Juliana, Mariano e os filhos reunidos durante o Natal",
+    label: "Natal em família",
   },
   {
     src: "/media/historia/familia-arraia.jpg",
@@ -510,6 +512,7 @@ export default function Home() {
             <a className="button button-ghost-light" href="#avatar"><CircleUserRound size={18} /> Criar meu avatar</a>
           </div>
           <div className="hero-proof"><span><Check size={14} /> Download direto</span><span><Check size={14} /> Organizado por tema</span><span><Check size={14} /> Feito para celular</span></div>
+          <small className="campaign-cnpj">CNPJ da campanha: {CAMPAIGN_CNPJ}</small>
         </div>
         <div className="hero-visual" aria-label="Fotos oficiais de Juliana">
           <span className="hero-number">1020</span>
@@ -653,7 +656,7 @@ export default function Home() {
 
       <section className="stickers-section"><div className="sticker-bubbles"><span>1020</span><span>💙</span><span>EU TÔ COM ELA</span><span>ARAGUAIA</span></div><div><span className="eyebrow light"><span /> Figurinhas no WhatsApp</span><h2>Coloque a Juliana nas suas conversas.</h2><p>Acesse o canal oficial, salve as figurinhas e compartilhe com seus contatos.</p></div><a className="button button-yellow" href="https://whatsapp.com/channel/0029Vb8J3XW8F2p68rcnif34" target="_blank" rel="noreferrer"><MessageCircle size={19} /> Abrir canal de figurinhas</a></section>
 
-      <footer><a className="footer-brand" href="#inicio"><img src="/media/juliana-logo.png" alt="Juliana 1020" /></a><p>Central oficial de materiais da campanha Juliana 1020 • Republicanos</p><div><a href="#historia">História</a><a href="#mandato">O que já fez</a><a href="#propostas">Propostas</a><a href="#materiais">Materiais</a><a href="#avatar">Minha foto</a></div></footer>
+      <footer><a className="footer-brand" href="#inicio"><img src="/media/juliana-logo.png" alt="Juliana 1020" /></a><p>Central oficial de materiais da campanha Juliana 1020 • Republicanos<small>CNPJ da campanha: {CAMPAIGN_CNPJ}</small></p><div><a href="#historia">História</a><a href="#mandato">O que já fez</a><a href="#propostas">Propostas</a><a href="#materiais">Materiais</a><a href="#avatar">Minha foto</a></div></footer>
 
       {modalMaterial ? <MaterialModal material={modalMaterial} onClose={() => setModalMaterial(null)} /> : null}
       {toast ? <div className="toast" role="status"><Check /> {toast}</div> : null}

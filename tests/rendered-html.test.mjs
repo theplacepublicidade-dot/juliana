@@ -34,7 +34,10 @@ test("server-renders the Juliana content hub", async () => {
   assert.match(html, /História e família/);
   assert.match(html, /Momentos da família de Juliana/);
   assert.match(html, /familia-lago\.jpg/);
+  assert.match(html, /Natal em família/);
+  assert.doesNotMatch(html, /Natal em família, com Dona Ivete/);
   assert.match(html, /16\.385/);
+  assert.match(html, /68\.545\.092\/0001-29/);
   assert.match(html, /id="mandato"/);
   assert.match(html, /28 votos a 7/);
   assert.match(html, /R\$ 500 milhões/);
