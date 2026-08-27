@@ -180,6 +180,79 @@ const videos: Material[] = videoFiles.map(([id, title]) => ({
   thumb: driveThumb(id),
 }));
 
+const localVideos: Material[] = [
+  {
+    id: "video-local-foguete",
+    title: "Juliana 1020 — Foguete",
+    kind: "Vídeos",
+    format: "Vídeo MP4",
+    theme: "Campanha",
+    localFile: "/video/juliana-foguete.mp4",
+    thumb: "/media/video-posters/juliana-foguete.jpg",
+    description: "Motion oficial da campanha em formato vertical.",
+  },
+  {
+    id: "video-local-idosos-depoimentos",
+    title: "Cuidado com os idosos — depoimentos",
+    kind: "Vídeos",
+    format: "Vídeo MP4",
+    theme: "Pessoa idosa",
+    localFile: "/video/idosos-depoimentos.mp4",
+    thumb: "/media/video-posters/idosos-depoimentos.jpg",
+    description: "Depoimentos sobre o trabalho dedicado à melhor idade.",
+  },
+  {
+    id: "video-local-apoiadora-24-08",
+    title: "A voz de quem apoia Juliana",
+    kind: "Vídeos",
+    format: "Vídeo MP4",
+    theme: "Apoiadores",
+    localFile: "/video/apoiadora-24-08.mp4",
+    thumb: "/media/video-posters/apoiadora-24-08.jpg",
+    description: "Depoimento de apoiadora sobre a candidatura de Juliana.",
+  },
+  {
+    id: "video-local-ruas-bg",
+    title: "Juliana nas ruas de Barra do Garças",
+    kind: "Vídeos",
+    format: "Vídeo MP4",
+    theme: "Campanha",
+    localFile: "/video/juliana-ruas-bg.mp4",
+    thumb: "/media/video-posters/juliana-ruas-bg.jpg",
+    description: "Mobilização, proximidade e conversa com a população.",
+  },
+  {
+    id: "video-local-barra-saude",
+    title: "Saúde em Barra do Garças",
+    kind: "Vídeos",
+    format: "Vídeo MP4",
+    theme: "Saúde",
+    localFile: "/video/barra-do-garcas-saude.mp4",
+    thumb: "/media/video-posters/barra-do-garcas-saude.jpg",
+    description: "Juliana apresenta prioridades para fortalecer a saúde regional.",
+  },
+  {
+    id: "video-local-apoiadores-barra",
+    title: "Apoiadores de Barra do Garças",
+    kind: "Vídeos",
+    format: "Vídeo MP4",
+    theme: "Apoiadores",
+    localFile: "/video/apoiadores-barra-do-garcas.mp4",
+    thumb: "/media/video-posters/apoiadores-barra-do-garcas.jpg",
+    description: "Lideranças e moradores explicam por que caminham com Juliana.",
+  },
+  {
+    id: "video-local-araguaiana",
+    title: "Juliana em Araguaiana — 26 de agosto",
+    kind: "Vídeos",
+    format: "Vídeo MP4",
+    theme: "Municípios",
+    localFile: "/video/juliana-araguaiana-26-08.mp4",
+    thumb: "/media/video-posters/juliana-araguaiana-26-08.jpg",
+    description: "Agenda e diálogo com a população de Araguaiana.",
+  },
+];
+
 const audios: Material[] = audioFiles.map(([id, title], index) => ({
   id: `audio-${id}`,
   title,
@@ -189,6 +262,18 @@ const audios: Material[] = audioFiles.map(([id, title], index) => ({
   driveId: id,
   localFile: `/audio/jingle-${String(index + 1).padStart(2, "0")}.mp3`,
 }));
+
+const localAudios: Material[] = [
+  {
+    id: "audio-local-forro-vaquejada",
+    title: "Juliana — Forró de vaquejada",
+    kind: "Músicas",
+    format: "Áudio MP3",
+    theme: "Jingles",
+    localFile: "/audio/juliana-forro-vaquejada.mp3",
+    description: "Versão oficial em ritmo de forró de vaquejada.",
+  },
+];
 
 const logos: Material[] = logoFiles.map(([id, title]) => ({
   id: `logo-${id}`,
@@ -267,8 +352,10 @@ const documents: Material[] = [
 
 export const materials: Material[] = [
   ...arts,
+  ...localVideos,
   ...videos,
   ...photos,
+  ...localAudios,
   ...audios,
   ...logos,
   ...prints,
@@ -277,8 +364,8 @@ export const materials: Material[] = [
 
 export const archiveCounts = {
   photos: photos.length,
-  videos: videos.length,
-  audios: audios.length,
+  videos: videos.length + localVideos.length,
+  audios: audios.length + localAudios.length,
   arts: arts.length,
   logos: logos.length,
   prints: prints.length,
@@ -287,7 +374,9 @@ export const archiveCounts = {
   total:
     photos.length +
     videos.length +
+    localVideos.length +
     audios.length +
+    localAudios.length +
     arts.length +
     logos.length +
     prints.length +

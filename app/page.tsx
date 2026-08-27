@@ -15,10 +15,8 @@ import {
   Download,
   FileText,
   FolderOpen,
-  HandHeart,
   HeartHandshake,
   Home as HomeIcon,
-  Hospital,
   Image as ImageIcon,
   Leaf,
   Menu,
@@ -70,12 +68,12 @@ const typeFilters = [
 ] as const;
 
 const featuredIds = [
-  "video-1E6FsQ9OMpRsvIRNM1zia7rP6fzb80rQ2",
-  "video-1XpusBENWqAQ1QRfntrbiGmvyc-aBFU02",
-  "video-1gBd2krPZhqNqrcBuh3Ia5HxZxWrDolKE",
-  "arte-1zFh-2DySkIEwRyVsamHIIVBk0AQtjL3Q",
-  "foto-1m0PThl54L8N7J2iALMjEXB_QW9_HnKW_",
-  "audio-1gsgmMbwnY1zwpzokl8j3sXeXN-v-U3yQ",
+  "video-local-foguete",
+  "video-local-barra-saude",
+  "video-local-idosos-depoimentos",
+  "video-local-apoiadores-barra",
+  "video-local-araguaiana",
+  "audio-local-forro-vaquejada",
 ];
 
 const familyPhotos = [
@@ -102,15 +100,12 @@ const familyPhotos = [
 ] as const;
 
 const proposalTopics = [
-  { title: "Educação", text: "Levar ambientes inclusivos, salas multissensoriais, formação e novas oportunidades para estudantes e profissionais da educação.", icon: BookOpen },
-  { title: "Saúde", text: "Fortalecer o atendimento regional, a prevenção e o acesso a especialidades, reduzindo longas viagens para quem vive no interior.", icon: Hospital },
-  { title: "Agro", text: "Ampliar crédito, garantias, assistência técnica e segurança jurídica para a agricultura familiar e para quem produz em cada região.", icon: Tractor },
-  { title: "Mulheres", text: "Expandir proteção contra a violência, acolhimento, qualificação profissional, autonomia financeira e geração de renda.", icon: ShieldCheck },
-  { title: "Habitação", text: "Criar parcerias para ampliar a moradia digna e transformar programas habitacionais em segurança real para famílias de baixa renda.", icon: HomeIcon },
-  { title: "Pessoa idosa", text: "Estimular convivência, atividade física, centros de cuidado e acolhimento digno para quem construiu a história de Mato Grosso.", icon: HandHeart },
-  { title: "Inclusão", text: "Fortalecer o atendimento integrado a crianças neurodivergentes e suas famílias, respeitando necessidades e ritmos individuais.", icon: Sparkles },
-  { title: "Cultura e talentos", text: "Valorizar artistas locais, eventos comunitários, esporte, lazer e iniciativas que criem pertencimento e novas oportunidades.", icon: Music2 },
-  { title: "Desenvolvimento regional", text: "Planejar investimentos a partir das vocações locais, protegendo o Araguaia e conciliando produção, cidades e qualidade de vida.", icon: Building2 },
+  { title: "Agronegócio forte", text: "Defender quem produz com crédito rural acessível, recomposição de dívidas, seguro rural e segurança para continuar investindo e gerando empregos.", icon: Tractor },
+  { title: "Agricultura familiar", text: "Garantir recursos, assistência técnica e instrumentos de crédito para o pequeno produtor ampliar a produção, a renda e sua permanência no campo.", icon: Leaf },
+  { title: "Família e liberdade", text: "Defender a família, proteger as crianças e assegurar a liberdade religiosa como princípios que orientam sua atuação pública.", icon: HeartHandshake },
+  { title: "Livre iniciativa", text: "Lutar por menos juros, mais crédito e melhores condições para empreendedores abrirem, manterem e ampliarem seus negócios.", icon: Building2 },
+  { title: "Autonomia das mulheres", text: "Fortalecer qualificação, proteção, renda e oportunidades para que cada mulher possa escolher seu caminho com independência.", icon: ShieldCheck },
+  { title: "Pautas da direita", text: "Representar com clareza os valores conservadores, a responsabilidade, a liberdade e os compromissos assumidos com seus eleitores.", icon: BadgeCheck },
 ] as const;
 
 const proposalPhotos = [
@@ -238,7 +233,7 @@ function MaterialCard({
   onShare: (material: Material) => void;
 }) {
   const canPreview = material.kind === "Vídeos" || Boolean(material.thumb);
-  const isAudio = material.kind === "Músicas" && material.driveId;
+  const isAudio = material.kind === "Músicas" && Boolean(material.localFile || material.driveId);
 
   return (
     <article className="archive-card">
@@ -291,7 +286,13 @@ function MaterialModal({ material, onClose }: { material: Material; onClose: () 
       <div className="media-dialog">
         <button className="modal-close" type="button" onClick={onClose} aria-label="Fechar visualização"><X /></button>
         <div className="modal-stage">
-          {material.kind === "Vídeos" && material.driveId ? (
+          {material.kind === "Vídeos" && material.localFile ? (
+            // Campaign videos are music/interview pieces and do not include a separate caption track.
+            // eslint-disable-next-line jsx-a11y/media-has-caption
+            <video controls playsInline preload="metadata" poster={material.thumb} src={material.localFile}>
+              Seu navegador não suporta vídeo.
+            </video>
+          ) : material.kind === "Vídeos" && material.driveId ? (
             <iframe src={drivePreview(material.driveId)} title={material.title} allow="autoplay; fullscreen" />
           ) : material.thumb ? (
             <img src={material.thumb.replace(/sz=w\d+/, "sz=w1600")} alt={material.title} />
@@ -302,7 +303,7 @@ function MaterialModal({ material, onClose }: { material: Material; onClose: () 
           <h3>{material.title}</h3>
           <div>
             <a className="button button-primary" href={materialDownloadHref(material)} target="_blank" rel="noreferrer"><Download size={17} /> Baixar arquivo</a>
-            <a className="button button-soft" href={materialHref(material)} target="_blank" rel="noreferrer"><FolderOpen size={17} /> Abrir no Drive</a>
+            <a className="button button-soft" href={materialHref(material)} target="_blank" rel="noreferrer"><FolderOpen size={17} /> {material.localFile ? "Abrir arquivo" : "Abrir no Drive"}</a>
           </div>
         </div>
       </div>
@@ -631,9 +632,16 @@ export default function Home() {
             <span className="proposal-vision-overline"><BadgeCheck size={17} /> Experiência que pode ganhar escala</span>
             <h3>Replicar o que dá resultado. Adaptar ao que cada região precisa.</h3>
             <p>As propostas de Juliana partem dos resultados construídos em Água Boa para ampliar políticas públicas de sucesso por Mato Grosso. Não se trata de impor um modelo único: cada ação será planejada ouvindo municípios, comunidades e lideranças, respeitando as particularidades sociais, econômicas, culturais e geográficas de cada região e atendendo suas necessidades pontuais.</p>
+            <div className="candidate-summary" aria-label="Quem é Juliana e por que votar nela">
+              <article><span><CircleUserRound /></span><small>Quem é Juliana?</small><strong>Veterinária, agropecuarista, casada e mãe.</strong></article>
+              <article><span><Sparkles /></span><small>Como é Juliana?</small><strong>Ativa, trabalhadora, correta e responsável.</strong></article>
+              <article><span><Check /></span><small>Por que votar em Juliana?</small><strong>É da região, conhece nossos problemas e mostrou personalidade e liderança quando foi deputada federal por quatro meses.</strong></article>
+            </div>
+            <div className="proposal-priorities-heading"><span>Compromissos</span><h4>As propostas que Juliana defende</h4></div>
             <div className="proposal-topic-grid">
               {proposalTopics.map((topic) => { const TopicIcon = topic.icon; return <div key={topic.title}><span><TopicIcon /></span><strong>{topic.title}</strong><p>{topic.text}</p></div>; })}
             </div>
+            <div className="proposal-slogan" aria-label="Juliana 1020"><span>Juliana é 10.</span><span>Juliana é 20.</span><strong>Juliana é 1020.</strong></div>
           </div>
         </article>
       </section>
