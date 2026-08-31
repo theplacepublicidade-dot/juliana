@@ -1,6 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm run build:vercel",
-  "outputDirectory": "dist-vercel",
-  "framework": "vite"
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "destination": "https://central-juliana-1020.plataformascomunicac.chatgpt.site/:path*"
+    }
+  ]
 }
