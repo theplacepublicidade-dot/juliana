@@ -8,6 +8,8 @@ export type MaterialKind =
   | "Documentos"
   | "Identidade";
 
+export type MaterialRegion = "norte" | "vale-do-araguaia" | "ambas";
+
 export type Material = {
   id: string;
   title: string;
@@ -20,6 +22,8 @@ export type Material = {
   localFile?: string;
   itemCount?: number;
   description?: string;
+  region?: MaterialRegion;
+  uploaded?: boolean;
 };
 
 export const drivePreview = (id: string) =>
@@ -360,7 +364,7 @@ export const materials: Material[] = [
   ...logos,
   ...prints,
   ...documents,
-];
+].map((material) => ({ ...material, region: "ambas" }));
 
 export const archiveCounts = {
   photos: photos.length,

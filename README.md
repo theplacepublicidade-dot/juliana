@@ -1,8 +1,17 @@
-# vinext-starter
+# Central Juliana
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+Central de materiais da campanha, organizada por Região Norte e Vale do
+Araguaia. O site reúne o acervo público, a criação de avatar e um painel
+administrativo protegido para enviar arquivos e definir em qual região cada
+conteúdo deve aparecer.
+
+## Painel administrativo
+
+- Acesso em `/admin` com a conta ChatGPT autorizada.
+- Upload direto de imagens, vídeos, áudios, PDFs e materiais de gráfica.
+- Arquivos armazenados em R2 e metadados/organização regional salvos em D1.
+- Cada item pode aparecer na Região Norte, no Vale do Araguaia ou nas duas.
+- Materiais enviados pelo painel podem ser removidos pelo administrador.
 
 ## Prerequisites
 

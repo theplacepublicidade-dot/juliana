@@ -2,13 +2,13 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-async function render() {
+async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request("http://localhost/", {
+    new Request(`http://localhost${pathname}`, {
       headers: { accept: "text/html" },
     }),
     {
@@ -23,13 +23,26 @@ async function render() {
   );
 }
 
-test("server-renders the Juliana content hub", async () => {
+test("server-renders the regional gateway", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
   assert.match(html, /<title>Central Juliana 1020 \| Materiais oficiais<\/title>/i);
+  assert.match(html, /Escolha sua região/);
+  assert.match(html, /Região Norte/);
+  assert.match(html, /Vale do Araguaia/);
+  assert.match(html, /\/central\/norte/);
+  assert.match(html, /\/central\/vale-do-araguaia/);
+  assert.match(html, /Painel administrativo/);
+  assert.doesNotMatch(html, /codex-preview|Building your site/i);
+});
+
+test("server-renders the Juliana content hub for a selected region", async () => {
+  const response = await render("/central/vale-do-araguaia");
+  assert.equal(response.status, 200);
+  const html = await response.text();
   assert.match(html, /id="historia"/);
   assert.match(html, /História e família/);
   assert.match(html, /Momentos da família de Juliana/);
@@ -62,9 +75,11 @@ test("server-renders the Juliana content hub", async () => {
   assert.doesNotMatch(html, /codex-preview|Building your site/i);
 });
 
-test("keeps photo personalization local and provides a Vercel build", async () => {
-  const [page, vercelHtml, vercelConfig, packageJson] = await Promise.all([
-    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+test("keeps photo personalization local and configures managed uploads", async () => {
+  const [page, admin, hosting, vercelHtml, vercelConfig, packageJson] = await Promise.all([
+    readFile(new URL("../app/central/CentralPage.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/admin/AdminDashboard.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../.openai/hosting.json", import.meta.url), "utf8"),
     readFile(new URL("../vercel/index.html", import.meta.url), "utf8"),
     readFile(new URL("../vercel.json", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
@@ -75,6 +90,12 @@ test("keeps photo personalization local and provides a Vercel build", async () =
   assert.match(page, /URL\.revokeObjectURL/);
   assert.match(page, /Sua foto é processada apenas no navegador/);
   assert.match(page, /material\.localFile \?\? driveDownload/);
+  assert.match(page, /regionAssignments/);
+  assert.match(admin, /Adicionar arquivo/);
+  assert.match(admin, /As duas regiões/);
+  assert.match(admin, /Vale do Araguaia/);
+  assert.match(hosting, /"d1": "DB"/);
+  assert.match(hosting, /"r2": "MATERIALS"/);
   assert.match(vercelHtml, /Central Juliana 1020/);
   assert.match(vercelHtml, /og\.jpg/);
   assert.match(vercelConfig, /"framework": "vite"/);
