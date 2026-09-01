@@ -21,6 +21,8 @@ type RuntimeEnv = {
   DB?: D1Database;
   MATERIALS?: R2Bucket;
   ADMIN_EMAIL?: string;
+  ADMIN_PASSWORD_HASH?: string;
+  ADMIN_SESSION_SECRET?: string;
 };
 
 export function getRuntimeEnv() {
@@ -77,7 +79,15 @@ export function getMaterialsBucket() {
 }
 
 export function getAdminEmail() {
-  return (getRuntimeEnv().ADMIN_EMAIL ?? "plataformascomunicacao@gmail.com").trim().toLowerCase();
+  return (getRuntimeEnv().ADMIN_EMAIL ?? "theplacepublicidade@gmail.com").trim().toLowerCase();
+}
+
+export function getAdminPasswordHash() {
+  return (getRuntimeEnv().ADMIN_PASSWORD_HASH ?? "").trim().toLowerCase();
+}
+
+export function getAdminSessionSecret() {
+  return (getRuntimeEnv().ADMIN_SESSION_SECRET ?? "").trim();
 }
 
 export function isMaterialRegion(value: unknown): value is MaterialRegion {

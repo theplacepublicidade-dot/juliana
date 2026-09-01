@@ -141,7 +141,7 @@ export default function AdminDashboard({ userEmail, displayName }: { userEmail: 
       <header className="admin-header">
         <Link href="/"><ArrowLeft /> Voltar à Central</Link>
         <img src="/media/juliana-logo.png" alt="Juliana 1020" />
-        <div><span>{displayName}</span><small>{userEmail}</small><a href="/signout-with-chatgpt?return_to=%2F"><LogOut /> Sair</a></div>
+        <div><span>{displayName}</span><small>{userEmail}</small><form action="/api/admin/logout" method="post"><button type="submit"><LogOut /> Sair</button></form></div>
       </header>
 
       <section className="admin-hero">
