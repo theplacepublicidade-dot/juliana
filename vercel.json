@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/:path*",
-      "destination": "https://central-juliana-1020.plataformascomunicac.chatgpt.site/:path*"
+      "src": "/(.*)",
+      "dest": "https://central-juliana-1020.plataformascomunicac.chatgpt.site/$1"
     }
   ]
 }
